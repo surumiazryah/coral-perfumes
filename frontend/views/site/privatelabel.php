@@ -247,7 +247,7 @@ else
                 e.preventDefault();
                 if ($("#g-recaptcha-private-label").next(".validation").length == 0) // only add if not added
                 {
-                    $("#g-recaptcha-private-label").after("<div class='validation' style='color:#c54040;text-align: center;font-size: 13px;'>Please verify that you are not a robot</div>");
+                    $("#g-recaptcha-private-label").after("<div class='validation' style='color:#c54040;text-align: center;font-size: 13px;margin-bottom: 14px;'>Please verify that you are not a robot</div>");
                 }
             }
         });
