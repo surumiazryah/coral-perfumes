@@ -2309,6 +2309,11 @@ a[data-zoom-id], .mz-thumb, .mz-thumb:focus{
     float: left;
     margin-bottom: 0px;
 }
+.my-account .shipping{
+    float: left;
+    margin-bottom: 0px;
+    padding-left: 17px;
+}
 .my-account .product-discp{
     margin-bottom: 0;
 }
