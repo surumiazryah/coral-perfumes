@@ -24,18 +24,10 @@ $this->title = 'Checkout-Confirm';
 <div id="checkout" class="my-account">
     <div class="container">
         <div class="col-lg-7 col-md-7 col-sm-12 left-accordation">
-            <div class="heading">
-                <p>1. Check out options </p>
-            </div>
-            <div class="heading">
-                <p>2.   Account & Billing Details</p>
-            </div>
-            <div class="heading">
-                <p>3.   Delivery Details</p>
-            </div>
-            <div class="heading margin-auto active">
-                <p>4.   Confirm Order</p>
-            </div>
+            <?= Html::a('<div class="heading"><p>1. Check out options </p></div>', ['cart/checkout'], ['class' => '']) ?>
+            <?= Html::a('<div class="heading"><p>2.   Account & Billing Details</p></div>', ['checkout'], ['class' => '']) ?>
+            <?= Html::a('<div class="heading"><p>3.   Delivery Details</p></div>', ['delivery'], ['class' => '']) ?>
+            <?= Html::a('<div class="heading margin-auto active"><p>4.   Confirm Order</p></div>', ['confirm'], ['class' => '']) ?>
             <div class="content lit-blue delivery-details col-xs-pad40-0">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <table class="table margin-auto">

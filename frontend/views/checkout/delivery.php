@@ -23,20 +23,15 @@ $this->title = 'Checkout-Delivery';
 <div id="checkout" class="my-account">
     <div class="container">
         <div class="col-lg-7 col-md-7 col-sm-12 left-accordation">
-            <div class="heading">
-                <p>1. Check out options </p>
-            </div>
-            <div class="heading">
-                <p>2.   Account & Billing Details</p>
-            </div>
-            <div class="heading margin-auto active">
-                <p>3.   Delivery Details</p>
-            </div>
+            <?= Html::a('<div class="heading"><p>1. Check out options </p></div>', ['cart/checkout'], ['class' => '']) ?>
+            <?= Html::a('<div class="heading"><p>2.   Account & Billing Details</p></div>', ['checkout'], ['class' => '']) ?>
+            <?= Html::a('<div class="heading margin-auto active"><p>3.   Delivery Details</p></div>', ['delivery'], ['class' => '']) ?>
+           
             <div class="content lit-blue delivery-details">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <?php $form = ActiveForm::begin(); ?>
                     <div class="form-group col-lg-12 col-md-8 col-sm-8 col-xs-12 address-field">
-                        <label for="usr">Billing Address*</label>
+                        <label for="usr">Delivery Address*</label>
                         <select class="form-control" id="delivery" name="Deliveryaddress[billing]">
                             <option value=''>Select</option>
                             <?php foreach ($addresses as $address) { ?>
