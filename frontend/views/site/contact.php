@@ -72,7 +72,7 @@ else
                 <h3>Contact Us</h3>
                 <p><?= $contact_data->content; ?></p>			</div>
             <br class="hidden-lg hidden-md hidden-sm"/>
-            <?php $form = ActiveForm::begin(); ?>
+            <?php $form = ActiveForm::begin(['id' => 'contact-form']); ?>
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-feild-box margin-auto xs-pad-0">
                 <div class="col-lg-10 col-md-8 col-sm-8 col-xs-12 cntnt-center">
 
@@ -116,5 +116,20 @@ else
         </div>
     </div>
     <div class="pad-20"></div>
+    <script>
+        $(document).ready(function () {
+            $('#contact-form').on('submit', function (e) {
+                var res = grecaptcha.getResponse();
+                if (res == "" || res == undefined || res.length == 0)
+                {
+                    e.preventDefault();
+                    if ($("#g-recaptcha").next(".validation").length == 0) // only add if not added
+                    {
+                        $("#g-recaptcha").after("<div class='validation' style='color:#c54040;text-align: center;font-size: 13px;'>Please verify that you are not a robot</div>");
+                    }
+                }
+            });
+        });
+    </script>
 </div>
 

@@ -178,7 +178,7 @@ else
             <br class="hidden-lg hidden-md hidden-sm"/>
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-feild-box margin-auto xs-pad-0">
                 <div class="col-lg-10 col-md-8 col-sm-8 col-xs-12 cntnt-center">
-                    <?php $form = ActiveForm::begin(['action' => 'site/contactus']); ?>
+                    <?php $form = ActiveForm::begin(['action' => 'site/contactus', 'id' => 'private-label-form']); ?>
                     <div class="form-group col-md-6 form-group1">
                         <div class="col-md-12 first-name">
                                 <!--<input required="" type="text" class="form-control" placeholder="First Name" id="usr-first-name">-->
@@ -238,3 +238,18 @@ else
 <div class="pad-20"></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/flickity/2.0.10/flickity.pkgd.min.js"></script>
 <script src="<?= yii::$app->homeUrl; ?>js/testimonial.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#private-label-form').on('submit', function (e) {
+            var res = grecaptcha.getResponse();
+            if (res == "" || res == undefined || res.length == 0)
+            {
+                e.preventDefault();
+                if ($("#g-recaptcha-private-label").next(".validation").length == 0) // only add if not added
+                {
+                    $("#g-recaptcha-private-label").after("<div class='validation' style='color:#c54040;text-align: center;font-size: 13px;'>Please verify that you are not a robot</div>");
+                }
+            }
+        });
+    });
+</script>
