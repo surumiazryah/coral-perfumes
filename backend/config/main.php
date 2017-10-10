@@ -46,6 +46,9 @@ return [
         'notifications' => [
             'class' => 'backend\modules\notifications\Module',
         ],
+        'promotions' => [
+            'class' => 'backend\modules\promotions\Module',
+        ],
     ],
     'components' => [
         'request' => [
@@ -64,7 +67,7 @@ return [
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
             'targets' => [
-                [
+                    [
                     'class' => 'yii\log\FileTarget',
                     'levels' => ['error', 'warning'],
                 ],
