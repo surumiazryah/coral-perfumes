@@ -199,7 +199,7 @@ class SiteController extends Controller {
 			}
 //            return $this->goBack();
 		} else {
-		$model_login->password = '';
+			$model_login->password = '';
 			return $this->render('login-signup', [
 				    'model_login' => $model_login,
 				    'model' => $model,
@@ -603,6 +603,10 @@ class SiteController extends Controller {
 		} else {
 			$model = FromOurBlog::find()->where(['id' => $id, 'status' => 1])->one();
 			if (!empty($model)) {
+				if (!empty($model->meta_keyword))
+					\Yii::$app->view->registerMetaTag(['name' => 'keywords', 'content' => $model->meta_keyword]);
+				if (!empty($model->meta_description))
+					\Yii::$app->view->registerMetaTag(['name' => 'description', 'content' => $model->meta_description]);
 				return $this->render('blog-detail', [
 					    'model' => $model
 				]);

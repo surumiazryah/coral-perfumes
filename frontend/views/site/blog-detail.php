@@ -1,6 +1,11 @@
 <?php
 
 use yii\helpers\Html;
+
+if (isset($model->meta_title) && $model->meta_title != '')
+	$this->title = $model->meta_title;
+else
+	$this->title = 'coralperfumes';
 ?>
 
 <div class="pad-20 hide-xs"></div>

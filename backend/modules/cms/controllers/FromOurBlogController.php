@@ -53,8 +53,10 @@ class FromOurBlogController extends Controller {
 		}
 		$ext = $model->image;
 		if ($model->load(Yii::$app->request->post()) && Yii::$app->SetValues->Attributes($model)) {
-
 			$model->blog_date = date('Y-m-d', strtotime($model->blog_date));
+			$model->meta_title = Yii::$app->request->post()['FromOurBlog']['meta_title'];
+			$model->meta_description = Yii::$app->request->post()['FromOurBlog']['meta_description'];
+			$model->meta_keyword = Yii::$app->request->post()['FromOurBlog']['meta_keyword'];
 			$model->save();
 			$image = UploadedFile::getInstance($model, 'image');
 

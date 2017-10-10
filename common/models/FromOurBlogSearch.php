@@ -10,68 +10,69 @@ use common\models\FromOurBlog;
 /**
  * FromOurBlogSearch represents the model behind the search form about `common\models\FromOurBlog`.
  */
-class FromOurBlogSearch extends FromOurBlog
-{
-    /**
-     * @inheritdoc
-     */
-    public function rules()
-    {
-        return [
-            [['id', 'status', 'CB', 'UB'], 'integer'],
-            [['title', 'blog_date', 'content', 'image', 'DOC', 'DOU'], 'safe'],
-        ];
-    }
+class FromOurBlogSearch extends FromOurBlog {
 
-    /**
-     * @inheritdoc
-     */
-    public function scenarios()
-    {
-        // bypass scenarios() implementation in the parent class
-        return Model::scenarios();
-    }
+	/**
+	 * @inheritdoc
+	 */
+	public function rules() {
+		return [
+			[['id', 'status', 'CB', 'UB'], 'integer'],
+			[['title', 'meta_title', 'meta_description', 'meta_keyword', 'blog_date', 'content', 'image', 'DOC', 'DOU'], 'safe'],
+		];
+	}
 
-    /**
-     * Creates data provider instance with search query applied
-     *
-     * @param array $params
-     *
-     * @return ActiveDataProvider
-     */
-    public function search($params)
-    {
-        $query = FromOurBlog::find();
+	/**
+	 * @inheritdoc
+	 */
+	public function scenarios() {
+		// bypass scenarios() implementation in the parent class
+		return Model::scenarios();
+	}
 
-        // add conditions that should always apply here
+	/**
+	 * Creates data provider instance with search query applied
+	 *
+	 * @param array $params
+	 *
+	 * @return ActiveDataProvider
+	 */
+	public function search($params) {
+		$query = FromOurBlog::find();
 
-        $dataProvider = new ActiveDataProvider([
-            'query' => $query,
-        ]);
+		// add conditions that should always apply here
 
-        $this->load($params);
+		$dataProvider = new ActiveDataProvider([
+		    'query' => $query,
+		]);
 
-        if (!$this->validate()) {
-            // uncomment the following line if you do not want to return any records when validation fails
-            // $query->where('0=1');
-            return $dataProvider;
-        }
+		$this->load($params);
 
-        // grid filtering conditions
-        $query->andFilterWhere([
-            'id' => $this->id,
-            'blog_date' => $this->blog_date,
-            'status' => $this->status,
-            'CB' => $this->CB,
-            'UB' => $this->UB,
-            'DOC' => $this->DOC,
-            'DOU' => $this->DOU,
-        ]);
+		if (!$this->validate()) {
+			// uncomment the following line if you do not want to return any records when validation fails
+			// $query->where('0=1');
+			return $dataProvider;
+		}
 
-        $query->andFilterWhere(['like', 'title', $this->title])
-            ->andFilterWhere(['like', 'content', $this->content])
-            ->andFilterWhere(['like', 'image', $this->image]);
+		// grid filtering conditions
+		$query->andFilterWhere([
+		    'id' => $this->id,
+		    'blog_date' => $this->blog_date,
+		    'status' => $this->status,
+		    'CB' => $this->CB,
+		    'UB' => $this->UB,
+		    'DOC' => $this->DOC,
+		    'DOU' => $this->DOU,
+		]);
 
-        return $dataProvider;
-    }
+		$query->andFilterWhere(['like', 'title', $this->title])
+			->andFilterWhere(['like', 'meta_title', $this->meta_title])
+			->andFilterWhere(['like', 'meta_description', $this->meta_description])
+			->andFilterWhere(['like', 'meta_keyword', $this->meta_keyword])
+			->andFilterWhere(['like', 'content', $this->content])
+			->andFilterWhere(['like', 'image', $this->image]);
+
+		return $dataProvider;
+	}
+
 }
