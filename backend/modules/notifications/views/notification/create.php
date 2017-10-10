@@ -4,10 +4,10 @@ use yii\helpers\Html;
 
 
 /* @var $this yii\web\View */
-/* @var $model common\models\Emirates */
+/* @var $model common\models\Notification */
 
-$this->title = 'Create Emirates';
-$this->params['breadcrumbs'][] = ['label' => 'Emirates', 'url' => ['index']];
+$this->title = 'Create Notification';
+$this->params['breadcrumbs'][] = ['label' => 'Notifications', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
@@ -20,8 +20,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
                         </div>
                         <div class="panel-body">
-                                <?=  Html::a('<i class="fa-th-list"></i><span> Manage Emirates</span>', ['index'], ['class' => 'btn btn-warning  btn-icon btn-icon-standalone']) ?>
-                                <div class="panel-body"><div class="emirates-create">
+                                <?=  Html::a('<i class="fa-th-list"></i><span> Manage Notification</span>', ['index'], ['class' => 'btn btn-warning  btn-icon btn-icon-standalone']) ?>
+                                <div class="panel-body"><div class="notification-create">
                                                 <?= $this->render('_form', [
                                                 'model' => $model,
                                                 ]) ?>

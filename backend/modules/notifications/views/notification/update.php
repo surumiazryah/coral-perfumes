@@ -3,10 +3,10 @@
 use yii\helpers\Html;
 
 /* @var $this yii\web\View */
-/* @var $model common\models\Settings */
+/* @var $model common\models\Notification */
 
-$this->title = 'Update Settings: ' . $model->id;
-$this->params['breadcrumbs'][] = ['label' => 'Settings', 'url' => ['index']];
+$this->title = 'Update Notification: ' . $model->id;
+$this->params['breadcrumbs'][] = ['label' => 'Notifications', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'Update';
 ?>
@@ -20,8 +20,8 @@ $this->params['breadcrumbs'][] = 'Update';
 
                         </div>
                         <div class="panel-body">
-				<?=  Html::a('<i class="fa-th-list"></i><span> Manage Settings</span>', ['index'], ['class' => 'btn btn-warning  btn-icon btn-icon-standalone']) ?>
-                                <div class="panel-body"><div class="settings-create">
+				<?=  Html::a('<i class="fa-th-list"></i><span> Manage Notification</span>', ['index'], ['class' => 'btn btn-warning  btn-icon btn-icon-standalone']) ?>
+                                <div class="panel-body"><div class="notification-create">
 						<?= $this->render('_form', [
                                                 'model' => $model,
                                                 ]) ?>
