@@ -112,6 +112,16 @@ $map->appendScript($bikeLayer->getJs());
                         </div>
                 </div>
         </div>
+	<div class="link2showroom">
+		<div class="container">
+			<div class="col-md-12">
+				<p class=""><?= $contact_data->shoroom_content; ?></p>
+				<!--<a href="showrooms.php"></a>-->
+				<?= Html::a('<button class="link-btn link-btn-large icon-right">Showrooms<i class="fa fa-space-shuttle"></i></button>', ['/site/showrooms'], ['class' => '']) ?>
+			</div>
+		</div>
+	</div>
+
         <div class="container">
                 <div class="contact-form-box">
                         <div class="col-md-12 text-center">

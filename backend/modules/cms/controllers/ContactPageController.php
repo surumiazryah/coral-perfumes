@@ -91,7 +91,9 @@ class ContactPageController extends Controller {
 		$model = $this->findModel($id);
 
 		if ($model->load(Yii::$app->request->post()) && $model->validate() && $model->save()) {
-			Yii::$app->getSession()->setFlash('success', "Updated Successfully");
+			$model->shoroom_content = Yii::$app->request->post()['ContactPage']['shoroom_content'];
+			if ($model->validate() && $model->save())
+				Yii::$app->getSession()->setFlash('success', "Updated Successfully");
 		}
 		return $this->render('update', [
 			    'model' => $model,
