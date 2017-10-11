@@ -236,7 +236,7 @@ class CheckoutController extends \yii\web\Controller {
         public function actionPaymentSuccess($id) {
                 $model = OrderMaster::find()->where(['order_id' => $id])->one();
                 if (!empty($model)) {
-                        $this->sendMail(Yii::$app->session['orderid']);
+                        $this->sendMail($id);
                         $model->payment_status = 1; /* payment success for 1 and 0 for fail */
                         $model->save();
                         Yii::$app->session['orderid'] = '';

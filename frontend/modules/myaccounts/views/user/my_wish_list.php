@@ -46,8 +46,8 @@ $product = \common\models\Product::findOne($model->product);
                 if ($product->offer_price > "0") {
                     $percentage = round(100 - (($product->offer_price / $product->price) * 100));
                     ?>
-                    <p class="dashed-price"> AED <?= $product->offer_price; ?></p><span class="offer"><?= $percentage ?>%OFF</span>
-                    <p class="offer-price">AED <?= $product->price; ?></p>
+                    <p class="dashed-price"> AED <?= $product->price; ?></p><span class="offer"><?= $percentage ?>%OFF</span>
+                    <p class="offer-price">AED <?= $product->offer_price; ?></p>
                 <?php } else {
                     ?>
                     <p class="offer-price">AED <?= $product->price; ?></p>

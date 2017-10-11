@@ -101,6 +101,7 @@ $(document).ready(function () {
     });
 
     $('.quantity').on('change keyup', function () {
+        showLoader();
         var quantity = this.value
         var $ids = $(this).attr('id');
         var ids = $ids.split('_');
