@@ -180,7 +180,9 @@ class CheckoutController extends \yii\web\Controller {
                                 $order_details = OrderDetails::find()->where(['order_id' => Yii::$app->session['orderid']])->all();
                                 $total_amt = $this->total($order_details);
                                 $shipping_limit = Settings::findOne('1')->value;
-                                return $this->render('confirm', ['order_details' => $order_details, 'subtotal' => $total_amt, 'shipping_limit' => $shipping_limit, 'order_master' => $order_master]);
+                                $promotions = OrderPromotions::find()->where(['order_master_id' => $order_master->id])->sum('promotion_discount');
+
+                                return $this->render('confirm', ['order_details' => $order_details, 'subtotal' => $total_amt, 'shipping_limit' => $shipping_limit, 'order_master' => $order_master, 'promotions' => $promotions]);
                         } else {
                                 $this->redirect(array('cart/mycart'));
                         }
@@ -193,7 +195,7 @@ class CheckoutController extends \yii\web\Controller {
                 if (isset(Yii::$app->user->identity->id)) {
                         if (Yii::$app->session['orderid']) {
                                 $model = OrderMaster::find()->where(['order_id' => Yii::$app->session['orderid']])->one();
-                                $promotions = OrderPromotions::find()->where(['order_master_id' => $model->id])->sum('promotion_discount');
+
                                 $model->status = 4;
                                 if ($model->save()) {
                                         return $this->redirect(['payment', 'id' => $model->order_id]);

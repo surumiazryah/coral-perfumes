@@ -66,7 +66,7 @@ use common\models\Settings;
                 <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8 pad-0" style="padding: 15px 15px; border-top: 1px solid #ddd; border-right: 1px solid #ddd;">
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 label cart-summary-subtotal">Subtotal</div>
                         <?php if (isset($promotions) && $promotions > 0) { ?>      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 label cart-summary-promotion-discount">Promotion Code Added</div> <?php } ?>
-                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 label">Shipping</div>
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 label">Shipping Charges</div>
                 </div>
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 pad-0" style="padding: 15px 15px; border-top: 1px solid #ddd;">
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 price cart-summary-subtotal-amount"><?= sprintf('%0.2f', $subtotal->total_amount) ?></div>

@@ -82,8 +82,22 @@ $this->title = 'Checkout-Confirm';
                                                 </tbody>
                                         </table>
                                         <div class="">
+                                                <?php
+                                                $promotion_disvount = 0;
+                                                if (isset($promotions) && $promotions > 0) {
+                                                        $promotion_disvount = $promotions;
+                                                        ?>
+                                                        <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10 shipping">
+                                                                <h5 class="product-heading text-right">Promotion Code Added:</h5>
+                                                        </div>
+                                                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 shipping-cost">
+
+                                                                <p class="text-right price"><?= sprintf('%0.2f', $promotions) ?></p>
+                                                        </div>
+                                                <?php } ?>
+
                                                 <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10 shipping">
-                                                        <h5 class="product-heading text-right">Shipping:</h5>
+                                                        <h5 class="product-heading text-right">Shipping Charges:</h5>
                                                 </div>
                                                 <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 shipping-cost">
                                                         <?php
@@ -96,7 +110,7 @@ $this->title = 'Checkout-Confirm';
                                                         <h5 class="product-heading text-right">Total:</h5>
                                                 </div>
                                                 <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 total-cost">
-                                                        <?php $grand_total = $subtotal + $ship_charge ?>
+                                                        <?php $grand_total = $subtotal + $ship_charge - $promotions ?>
                                                         <p class="text-right price">AED <?= sprintf('%0.2f', $grand_total) ?></p>
                                                 </div>
                                         </div>
