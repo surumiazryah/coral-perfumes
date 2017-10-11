@@ -303,27 +303,33 @@ class CheckoutController extends \yii\web\Controller {
                                                         $order_master = OrderMaster::find()->where(['order_id' => Yii::$app->session['orderid']])->one();
                                                         $prev_promotion = OrderPromotions::find()->where(['order_master_id' => $order_master->id, 'promotion_id' => $code_exists->id])->exists();
                                                         if (!$prev_promotion) {
+                                                                $amount_range = $this->AmountRange($code_exists, $order_master);
+                                                                if ($amount_range == 0) {
+                                                                        if ($code_exists->type == 1) {
+                                                                                $promotion_discount = ($order_master->total_amount * $code_exists->price) / 100;
+                                                                        } else {
+                                                                                $promotion_discount = $code_exists->price;
+                                                                        }
 
-                                                                if ($code_exists->type == 1) {
-                                                                        $promotion_discount = ($order_master->total_amount * $code_exists->price) / 100;
+                                                                        $order_master->net_amount = $order_master->net_amount - $promotion_discount;
+                                                                        $order_master->update();
+                                                                        if ($code_exists->code_usage == 1) {
+                                                                                $this->AddUsed($code_exists, $order_master);
+                                                                        }
+                                                                        $added_promotion = new OrderPromotions;
+                                                                        $added_promotion->order_master_id = $order_master->id;
+                                                                        $added_promotion->promotion_id = $code_exists->id;
+                                                                        $added_promotion->promotion_discount = $promotion_discount;
+                                                                        $added_promotion->save();
+                                                                        $promotion_amount = OrderPromotions::find()->where(['order_master_id' => $order_master->id])->sum('promotion_discount');
+                                                                        $arr_variable = array('con' => '1', 'code' => $code, 'total_amount' => $promotion_amount, 'amount' => $promotion_discount, 'discount_id' => $added_promotion->id);
+                                                                        $data['result'] = $arr_variable;
+                                                                        echo json_encode($data);
                                                                 } else {
-                                                                        $promotion_discount = $code_exists->price;
+                                                                        $arr_variable = array('con' => '2', 'amount' => $code_exists->amount_range);
+                                                                        $data['result'] = $arr_variable;
+                                                                        echo json_encode($data);
                                                                 }
-
-                                                                $order_master->net_amount = $order_master->net_amount - $promotion_discount;
-                                                                $order_master->update();
-                                                                if ($code_exists->code_usage == 1) {
-                                                                        $this->AddUsed($code_exists, $order_master);
-                                                                }
-                                                                $added_promotion = new OrderPromotions;
-                                                                $added_promotion->order_master_id = $order_master->id;
-                                                                $added_promotion->promotion_id = $code_exists->id;
-                                                                $added_promotion->promotion_discount = $promotion_discount;
-                                                                $added_promotion->save();
-                                                                $promotion_amount = OrderPromotions::find()->where(['order_master_id' => $order_master->id])->sum('promotion_discount');
-                                                                $arr_variable = array('code' => $code, 'total_amount' => $promotion_amount, 'amount' => $promotion_discount, 'discount_id' => $added_promotion->id);
-                                                                $data['result'] = $arr_variable;
-                                                                echo json_encode($data);
                                                         } else {
                                                                 echo '5';
                                                         }
@@ -340,6 +346,17 @@ class CheckoutController extends \yii\web\Controller {
                                 echo '1';
                         }
                 }
+        }
+
+        public function AmountRange($code_exists, $order_master) {
+                $amount_range = 0;
+                if (isset($code_exists->amount_range) && $code_exists->amount_range != '') {
+                        if ($order_master->total_amount > $code_exists->amount_range)
+                                $amount_range = 0;
+                        else
+                                $amount_range = 1;
+                }
+                return $amount_range;
         }
 
         public function actionPromotionRemove() {
