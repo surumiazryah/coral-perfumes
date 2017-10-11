@@ -34,7 +34,7 @@ use yii\widgets\ActiveForm;
 
 					<p class="contact-information">Enter the new Email ID / Mobile number you wish to associate with your account. </p>
 					<?php
-					if (!empty($model->email_verification) || $nmodel->email_verification == NULL) {
+					if ($model->email_verification == NULL) {
 						?>
 						<p style="color: red;font-weight: 600;">(Please verify Email Id).</p>
 							<!--<div class="email_verify_div"><p class="email_verify_p"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i>Please verify your Email Id</p></div>-->
@@ -62,7 +62,7 @@ use yii\widgets\ActiveForm;
 										?>
 									</select>
 									<?= $form->field($model, 'mobile_no')->textInput(['placeholder' => '555 555 5555', 'data-format' => '+1 (ddd) ddd-dddd', 'style' => 'padding-left: 70px;'])->label(FALSE) ?>
-									<!--<input style="padding-left: 70px;" type="phone" id="user-mobile_number" class="form-control" name="UserAddress[mobile_number]" value="<?php // $model->mobile_number                                                       ?>" maxlength="15" aria-invalid="false" data-format="+1 (ddd) ddd-dddd">-->
+									<!--<input style="padding-left: 70px;" type="phone" id="user-mobile_number" class="form-control" name="UserAddress[mobile_number]" value="<?php // $model->mobile_number                                                         ?>" maxlength="15" aria-invalid="false" data-format="+1 (ddd) ddd-dddd">-->
 								</div>
 							</div>
 							<!--                            <div class="col-md-8 pad-0">
