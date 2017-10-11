@@ -23,43 +23,43 @@ use Yii;
  */
 class ContactPage extends \yii\db\ActiveRecord {
 
-	/**
-	 * @inheritdoc
-	 */
-	public static function tableName() {
-		return 'contact_page';
-	}
+        /**
+         * @inheritdoc
+         */
+        public static function tableName() {
+                return 'contact_page';
+        }
 
-	/**
-	 * @inheritdoc
-	 */
-	public function rules() {
-		return [
-			[['content', 'accounts_info', 'administration_info', 'marketing_info', 'business_info', 'marketing_address', 'date_1'], 'string'],
-			[['map', 'accounts_info', 'administration_info', 'marketing_info', 'business_info', 'marketing_address', 'address_1', 'address_2', 'address_3', 'address_4'], 'required'],
-			[['map'], 'string', 'max' => 500],
-		];
-	}
+        /**
+         * @inheritdoc
+         */
+        public function rules() {
+                return [
+                        [['content', 'accounts_info', 'administration_info', 'marketing_info', 'business_info', 'marketing_address', 'date_1'], 'string'],
+                        [['map', 'accounts_info', 'administration_info', 'marketing_info', 'business_info', 'marketing_address', 'address_1', 'address_2', 'address_3', 'address_4'], 'required'],
+                        [['map'], 'string', 'max' => 500],
+                ];
+        }
 
-	/**
-	 * @inheritdoc
-	 */
-	public function attributeLabels() {
-		return [
-		    'id' => 'ID',
-		    'map' => 'Map',
-		    'content' => 'Content',
-		    'accounts_info' => 'Accounts Info',
-		    'administration_info' => 'Administration Info',
-		    'marketing_info' => 'Marketing Info',
-		    'business_info' => 'Business Info',
-		    'marketing_address' => 'Marketing Address',
-		    'address_1' => 'Address 1',
-		    'address_2' => 'Address 2',
-		    'address_3' => 'Address 3',
-		    'address_4' => 'Address 4',
-		    'date_1' => 'Date 1',
-		];
-	}
+        /**
+         * @inheritdoc
+         */
+        public function attributeLabels() {
+                return [
+                    'id' => 'ID',
+                    'map' => 'Maps',
+                    'content' => 'Content',
+                    'accounts_info' => 'Accounts Info',
+                    'administration_info' => 'Administration Info',
+                    'marketing_info' => 'Marketing Info',
+                    'business_info' => 'Business Info',
+                    'marketing_address' => 'Marketing Address',
+                    'address_1' => 'Address 1',
+                    'address_2' => 'Address 2',
+                    'address_3' => 'Address 3',
+                    'address_4' => 'Address 4',
+                    'date_1' => 'Date 1',
+                ];
+        }
 
 }
