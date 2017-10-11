@@ -292,9 +292,13 @@ class SiteController extends Controller {
         $country_codes = ArrayHelper::map(\common\models\CountryCode::find()->where(['status' => 1])->orderBy(['id' => SORT_ASC])->all(), 'id', 'country_code');
         $contact_data = ContactPage::find()->where(['id' => 1])->one();
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            $model->date = date('Y-m-d');
-            if ($model->save()) {
-                $this->sendContactMail($model);
+            if (isset($_POST['g-recaptcha-response']))
+                $captcha = $_POST['g-recaptcha-response'];
+            if (!$captcha) {
+                $model->date = date('Y-m-d');
+                if ($model->save()) {
+                    $this->sendContactMail($model);
+                }
             }
             return $this->refresh();
         } else {
@@ -316,7 +320,6 @@ class SiteController extends Controller {
         $to = "manu@azryah.com";
 
         $message = "<html>
-    }
 <head>
 
 </head>
@@ -362,7 +365,7 @@ class SiteController extends Controller {
 ";
         $headers = 'MIME-Version: 1.0' . "\r\n";
         $headers .= "Content-type: text/html; charset=iso-8859-1" . "\r\n" .
-                "From: info@travinno.com";
+                "From: no-replay@coralperfumes.com";
         mail($to, $subject, $message, $headers);
     }
 
@@ -422,9 +425,13 @@ class SiteController extends Controller {
     public function actionContactus() {
         $model = new ContactUs();
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            $model->date = date('Y-m-d');
-            if ($model->save()) {
-                $this->sendContactMail($model);
+            if (isset($_POST['g-recaptcha-response']))
+                $captcha = $_POST['g-recaptcha-response'];
+            if (!$captcha) {
+                $model->date = date('Y-m-d');
+                if ($model->save()) {
+                    $this->sendContactMail($model);
+                }
             }
             return $this->redirect('private-label');
         }
