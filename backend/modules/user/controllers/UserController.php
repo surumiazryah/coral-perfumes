@@ -9,6 +9,8 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use common\models\Cart;
+use common\models\WishListSearch;
+use common\models\CartSearch;
 
 /**
  * UserController implements the CRUD actions for User model.
@@ -43,11 +45,22 @@ class UserController extends Controller {
     }
 
     public function actionViewCart($id) {
-        $model = $this->findModel($id);
-        $cart_details = Cart::find()->where(['user_id' => $id])->all();
+        $searchModel = new CartSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->query->andWhere(['user_id' => $id]);
         return $this->render('cart-view', [
-                    'model' => $model,
-                    'cart_details' => $cart_details,
+                    'searchModel' => $searchModel,
+                    'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    public function actionViewWishlist($id) {
+        $searchModel = new WishListSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->query->andWhere(['user_id' => $id]);
+        return $this->render('wishlist-view', [
+                    'searchModel' => $searchModel,
+                    'dataProvider' => $dataProvider,
         ]);
     }
 

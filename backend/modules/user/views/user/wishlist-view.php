@@ -8,7 +8,7 @@ use common\models\Product;
 /* @var $searchModel common\models\UserSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'User Cart';
+$this->title = 'User Wishlist';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="user-index">
@@ -29,18 +29,18 @@ $this->params['breadcrumbs'][] = $this->title;
                         GridView::widget([
                             'dataProvider' => $dataProvider,
                             'rowOptions' => function ($model, $index, $widget, $grid) {
-                                $url = 'http://' . Yii::$app->getRequest()->serverName . Yii::$app->homeUrl . 'product/product/update?id=' . $model->product_id;
-                                return ['data-id' => $model->product_id, 'onclick' => "window.location.href='{$url}'", 'onmouseover' => "this.style.backgroundColor='rgba(167, 167, 167, 0.52)',this.style.cursor='pointer'", 'onmouseout' => "this.style.backgroundColor=''"];
+                                $url = 'http://' . Yii::$app->getRequest()->serverName . Yii::$app->homeUrl . 'product/product/update?id=' . $model->product;
+                                return ['data-id' => $model->product, 'onclick' => "window.location.href='{$url}'", 'onmouseover' => "this.style.backgroundColor='rgba(167, 167, 167, 0.52)',this.style.cursor='pointer'", 'onmouseout' => "this.style.backgroundColor=''"];
                             },
                             'columns' => [
                                 ['class' => 'yii\grid\SerialColumn'],
                                 [
-                                    'attribute' => 'product_id',
+                                    'attribute' => 'product',
                                     'label' => 'Product Image',
                                     'format' => 'raw',
                                     'value' => function ($data) {
-                                        if (isset($data->product_id)) {
-                                            $product = common\models\Product::findOne($data->product_id);
+                                        if (isset($data->product)) {
+                                            $product = common\models\Product::findOne($data->product);
                                             $img = '<img width="" src="' . Yii::$app->homeUrl . '../uploads/product/' . $product->id . '/profile/' . $product->canonical_name . '_thumb.' . $product->profile . '"/>';
                                         } else {
                                             $img = '';
@@ -49,34 +49,12 @@ $this->params['breadcrumbs'][] = $this->title;
                                     },
                                 ],
                                 [
-                                    'attribute' => 'product_id',
+                                    'attribute' => 'product',
                                     'label' => 'Product Name',
                                     'format' => 'raw',
                                     'value' => function ($data) {
-                                        if (isset($data->product_id)) {
-                                            return Product::findOne($data->product_id)->product_name;
-                                        } else {
-                                            return '';
-                                        }
-                                    },
-                                ],
-                                [
-                                    'attribute' => 'quantity',
-                                    'format' => 'raw',
-                                    'value' => function ($data) {
-                                        if (isset($data->quantity)) {
-                                            return $data->quantity;
-                                        } else {
-                                            return '';
-                                        }
-                                    },
-                                ],
-                                [
-                                    'attribute' => 'rate',
-                                    'format' => 'raw',
-                                    'value' => function ($data) {
-                                        if (isset($data->rate)) {
-                                            return $data->rate;
+                                        if (isset($data->product)) {
+                                            return Product::findOne($data->product)->product_name;
                                         } else {
                                             return '';
                                         }
