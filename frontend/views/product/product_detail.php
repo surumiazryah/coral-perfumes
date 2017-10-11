@@ -72,7 +72,7 @@ else
 
 					<div class="selectors">
 						<a data-zoom-id="Zoom-1" href="<?= Yii::$app->homeUrl . 'uploads/product/' . $product_details->id . '/profile/' . $product_details->canonical_name . '_big.' . $product_details->profile ?>">
-							<img srcset="<?= Yii::$app->homeUrl . 'uploads/product/' . $product_details->id . '/profile/' . $product_details->canonical_name . '_big.' . $product_details->profile ?>" width="94px" height="93px"/>
+							<img srcset="<?= Yii::$app->homeUrl . 'uploads/product/' . $product_details->id . '/profile/' . $product_details->canonical_name . '_big.' . $product_details->profile ?>" width="94px" height="93px" class="thumb-style"/>
 						</a>
 						<?php
 						$path = Yii::getAlias('@paths') . '/product/' . $product_details->id . '/gallery_thumb';
@@ -88,7 +88,7 @@ else
 									if ($img_nmees['1'] != '') {
 										?>
 										<a data-zoom-id="Zoom-1" href="<?= Yii::$app->homeUrl . 'uploads/product/' . $product_details->id . '/gallery/' . end($arry) ?>">
-											<img srcset="<?= Yii::$app->homeUrl . 'uploads/product/' . $product_details->id . '/gallery/' . end($arry) ?>" width="94px" height="93px"/>
+											<img srcset="<?= Yii::$app->homeUrl . 'uploads/product/' . $product_details->id . '/gallery/' . end($arry) ?>" width="94px" height="93px" class="thumb-style"/>
 										</a>
 										<?php
 									}

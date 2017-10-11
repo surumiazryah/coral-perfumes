@@ -4758,3 +4758,22 @@ lesshat-selector {
 .promotion-remove:hover{
         color: red;
 }
+.thumb-style{
+	width: 100%;
+	height:100%;
+}
+.email_verify_p{
+	color: #181616;
+	font-size: 13px;
+	padding-left: 9px;
+	padding-top: 2px;
+}
+.email_verify_div{
+	background: rgba(220, 31, 31, 0.43);
+	/* color: white; */
+	width: 28%;
+	height: 12%;
+}
+.email_verify_p i:after{
+	padding-right: 5px;
+}

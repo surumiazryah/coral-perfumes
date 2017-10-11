@@ -6,9 +6,9 @@ use yii\bootstrap\ActiveForm;
 $this->title = 'Forgot-password';
 ?>
 <style>
-.margin-auto .form-group {
-    padding: 0 0px;
-}
+	.margin-auto .form-group {
+		padding: 0 0px;
+	}
 </style>
 
 <div class="pad-20 hide-xs"></div>
@@ -53,7 +53,7 @@ $this->title = 'Forgot-password';
 				?>
 				<div class="form-group col-md-12 margin-auto">
 					<label for="usr">E-Mail Address or Username*</label>
-					<?= $form->field($model, 'username')->textInput(['class' => 'form-control', 'placeholder' => "Username or Email", 'autocomplete' => 'off'])->label(false) ?>
+					<?= $form->field($model, 'email')->textInput(['class' => 'form-control', 'placeholder' => "Username or Email", 'autocomplete' => 'off'])->label(false) ?>
 				</div>
 				<?= Html::submitButton('submit', ['class' => 'green2']) ?>
 				<?php ActiveForm::end(); ?>

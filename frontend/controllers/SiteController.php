@@ -217,20 +217,18 @@ class SiteController extends Controller {
 		if ($model->load(Yii::$app->request->post())) {
 			if ($user = $model->signup()) {
 
-//				$this->sendResponseMail($model);
-				if ($user->email_verification == 1) {
-					if (Yii::$app->getUser()->login($user)) {
-						if (yii::$app->session['after_login'] != '') {
-							$this->redirect(array(yii::$app->session['after_login']));
-						} else {
-							return $this->goHome();
-						}
-					}
-				} else {
-					Yii::$app->session->setFlash('success', 'Please Verify Your Email Id.');
+				//$this->sendResponseMail($model);
+
+				if (Yii::$app->getUser()->login($user)) {
 					$this->Emailverification($user);
-					return $this->redirect(Yii::$app->request->referrer);
+					if (yii::$app->session['after_login'] != '') {
+						$this->redirect(array(yii::$app->session['after_login']));
+					} else {
+						return $this->goHome();
+					}
 				}
+				//Yii::$app->session->setFlash('success', 'Please Verify Your Email Id.');
+//					return $this->redirect(Yii::$app->request->referrer);
 			}
 		}
 		$model_login = new LoginForm();
@@ -493,7 +491,7 @@ class SiteController extends Controller {
 		$model = new User();
 		if ($model->load(Yii::$app->request->post())) {
 
-			$check_exists = User::find()->where("username = '" . $model->username . "' OR email = '" . $model->username . "'")->one();
+			$check_exists = User::find()->where(['email' => $model->email])->one();
 			if (!empty($check_exists)) {
 
 				$token_value = $this->tokenGenerator();
