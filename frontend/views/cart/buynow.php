@@ -102,7 +102,7 @@ $this->title = 'Shopping Cart';
                                 <td class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="text-align: center">
                                     <div class="input-group number-spinner">
                                         <span class="input-group-btn data-dwn">
-                                            <button class="btn btn-default btn-info cart_quantity" id="<?= $cart->id; ?>" data-dir="dwn"><i class="fa fa-minus" aria-hidden="true"></i></button>
+                                            <button class="btn btn-default btn-info cart_quantity cart_quantity-minus" id="<?= $cart->id; ?>" data-dir="dwn"><i class="fa fa-minus" aria-hidden="true"></i></button>
                                         </span>
                                         <?php
                                         if ($cart->item_type == 1) {
@@ -113,7 +113,7 @@ $this->title = 'Shopping Cart';
                                         ?>
                                         <input type='number'  name='cart_quantity' class="form-control text-center quantity" id="quantity_<?= $cart->id; ?>" value="<?= $cart->quantity ?>" min="1" <?= $max ?>>
                                         <span class="input-group-btn data-up">
-                                            <button class="btn btn-default btn-info cart_quantity" id="<?= $cart->id; ?>" data-dir="up"><i class="fa fa-plus" aria-hidden="true"></i></button>
+                                            <button class="btn btn-default btn-info cart_quantity cart_quantity-plus" id="<?= $cart->id; ?>" data-dir="up"><i class="fa fa-plus" aria-hidden="true"></i></button>
                                         </span>
                                     </div>
                                 </td>
@@ -242,3 +242,25 @@ $this->title = 'Shopping Cart';
 </div>
 
 <div class="pad-30 hidden-xs"></div>
+<script>
+    $(document).ready(function () {
+
+        $('.cart_quantity-plus').on('click', function () {
+            var id = $(this).attr('id');
+            var max = $('#quantity_' + id).attr('max');
+            var num = parseInt($('#quantity_' + id).val());
+            var add = parseInt(num + 1);
+            if (add <= max) {
+                $('#quantity_' + id).val(add);
+            }
+        });
+        $('.cart_quantity-minus').on('click', function () {
+            var id = $(this).attr('id');
+            var num = parseInt($('#quantity_' + id).val());
+            var add = parseInt(num - 1);
+            if (add >= 1) {
+                $('#quantity_' + id).val(add);
+            }
+        });
+    });
+</script>
