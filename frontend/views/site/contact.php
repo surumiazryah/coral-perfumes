@@ -69,7 +69,7 @@ else
     <div class="container">
         <div class="contact-form-box">
             <div class="col-md-12 text-center">
-                <h3>Contact Us</h3>
+                <h3>Get in touch with us</h3>
                 <p><?= $contact_data->content; ?></p>			</div>
             <br class="hidden-lg hidden-md hidden-sm"/>
             <?php $form = ActiveForm::begin(['id' => 'contact-form']); ?>

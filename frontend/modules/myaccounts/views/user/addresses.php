@@ -79,29 +79,37 @@ use yii\helpers\ArrayHelper;
                 </div>
             </div>
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 user-addresses">
-                <h6>Your Saved Addresses:</h6>
                 <?php
-                foreach ($user_address as $value) {
+                if (!empty($user_address)) {
                     ?>
-                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 user-adddress lit-blue" id="useraddress-<?= $value->id ?>">
-                        <div class="user-address-hei">
-                            <p><strong><?= $value->name ?></strong></p>
-                            <p><?= $value->address ?></p>
-                            <p><?= $value->landmark ?></p>
-                            <p><?= $value->location ?></p>
-                            <p><?= $value->post_code ?></p>
-                            <p><?= $value->mobile_number ?></p>
+                    <h6>Your Saved Addresses:</h6>
+                    <?php
+                    foreach ($user_address as $value) {
+                        ?>
+                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 user-adddress lit-blue" id="useraddress-<?= $value->id ?>">
+                            <div class="user-address-hei">
+                                <p><strong><?= $value->name ?></strong></p>
+                                <p><?= $value->address ?></p>
+                                <p><?= $value->landmark ?></p>
+                                <p><?= $value->location ?></p>
+                                <p><?= $value->post_code ?></p>
+                                <p><?= $value->mobile_number ?></p>
+                            </div>
+                            <label id="Radio0">
+                                <input type="radio" name="default-address" value="<?= $value->id ?>" <?php
+                                if ($value->status == 1) {
+                                    echo ' checked';
+                                }
+                                ?> data-waschecked="true" />
+                                Default address
+                            </label>
+                            <a href="" class="delete-address" data-val="<?= $value->id ?>"><i class="fa fa-trash" aria-hidden="true"></i>Delete address</a>
                         </div>
-                        <label id="Radio0">
-                            <input type="radio" name="default-address" value="<?= $value->id ?>" <?php
-                            if ($value->status == 1) {
-                                echo ' checked';
-                            }
-                            ?> data-waschecked="true" />
-                            Default address
-                        </label>
-                        <a href="" class="delete-address" data-val="<?= $value->id ?>"><i class="fa fa-trash" aria-hidden="true"></i>Delete address</a>
-                    </div>
+                        <?php
+                    }
+                } else {
+                    ?>
+                    <h6 style="text-transform: none;">You have no saved addresses:</h6>
                 <?php }
                 ?>
 
@@ -137,6 +145,7 @@ use yii\helpers\ArrayHelper;
                     success: function (data) {
                         if (data == 1) {
                             $("#useraddress-" + idd).remove();
+                            location.reload();
                         }
                     }
                 });

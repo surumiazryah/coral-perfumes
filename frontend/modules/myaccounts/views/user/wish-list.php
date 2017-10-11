@@ -47,8 +47,13 @@ use common\components\EmptyDataWidget;
                 <?php
             } else {
                 ?>
-                <div class="col-lg-12 col-md-12 col-sm-12 hidden-xs empty-data">
-                    <?= EmptyDataWidget::widget(['path' => Yii::$app->homeUrl . 'images/empty-wishlist.png', 'msg' => 'Your Wishlist is Empty']) ?>
+                <div class="settings">
+                    <div class="col-lg-12 col-md-12 col-sm-12 hidden-xs empty-data right-box" style="width: 98%;">
+                        <?= EmptyDataWidget::widget(['path' => Yii::$app->homeUrl . 'images/empty-wishlist.png', 'msg' => 'Your Wishlist is Empty']) ?>
+                    </div>
+                    <div class="hidden-lg hidden-md hidden-sm col-xs-12 my-account-cntnt empty-data right-box" style="width: 98%;">
+                        <?= EmptyDataWidget::widget(['path' => Yii::$app->homeUrl . 'images/empty-wishlist.png', 'msg' => 'Your Wishlist is Empty']) ?>
+                    </div>
                 </div>
                 <?php
             }
