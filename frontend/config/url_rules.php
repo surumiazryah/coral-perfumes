@@ -30,6 +30,7 @@ return [
     'create-your-own' => 'create_your_own/create-your-own/index',
     'category/<id>/<featured>' => 'product/index',
     '<id>' => 'product/index',
+    'products/<featured>/<category>' => 'product/index',
     'products/<featured>' => 'product/index',
     'product-detail/<product:\w+(-\w+)*>' => 'product/product_detail',
 ];
