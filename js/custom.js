@@ -80,9 +80,9 @@ $(document).ready(function () {
         var id = $(this).attr('id');
 //        var price = $('.price_' + id).html();
         var quantity = $('#quantity_' + id).val();
+        $("#quantity2_" + id).val(parseInt(quantity));
         findstock(id, quantity);
         updatecart(id, quantity);
-        $("#quantity2_" + id).val(parseInt(quantity));
 
     });
     $(document).click(function () {
