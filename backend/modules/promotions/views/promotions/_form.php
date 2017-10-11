@@ -56,16 +56,9 @@ use yii\helpers\ArrayHelper;
                 } else {
                         $model->starting_date = date('d-m-Y');
                 }
-                echo DatePicker::widget([
-                    'model' => $model,
-                    'form' => $form,
-                    'type' => DatePicker::TYPE_INPUT,
-                    'attribute' => 'starting_date',
-                    'pluginOptions' => [
-                        'autoclose' => true,
-                        'format' => 'dd-mm-yyyy',
-                    ]
-                ]);
+                echo $form->field($model, 'starting_date')->widget(\yii\jui\DatePicker::classname(), [
+                    'dateFormat' => 'dd-MM-yyyy',
+                    'options' => ['class' => 'form-control', 'placeholder' => 'Date']])->label('Starting Date')
                 ?>
 
         </div><div class='col-md-4 col-sm-6 col-xs-12 left_padd'>
@@ -76,17 +69,12 @@ use yii\helpers\ArrayHelper;
                 } else {
                         $model->expiry_date = date('d-m-Y');
                 }
-                echo DatePicker::widget([
-                    'model' => $model,
-                    'form' => $form,
-                    'type' => DatePicker::TYPE_INPUT,
-                    'attribute' => 'expiry_date',
-                    'pluginOptions' => [
-                        'autoclose' => true,
-                        'format' => 'dd-mm-yyyy',
-                    ]
-                ]);
+                echo $form->field($model, 'expiry_date')->widget(\yii\jui\DatePicker::classname(), [
+                    'dateFormat' => 'dd-MM-yyyy',
+                    'options' => ['class' => 'form-control', 'placeholder' => 'Date']])->label('Expiry Date')
                 ?>
+
+
 
         </div>
         <div class='col-md-4 col-sm-6 col-xs-12' style="float:right;">
