@@ -79,6 +79,7 @@ $this->title = 'Forgot-password';
 
 		} else {
 			$(".confirm_password").removeClass('has-error');
+			$(".confirm_password p").text("");
 			$(".confirm_password").addClass('has-success');
 		}
 	}

@@ -16,6 +16,8 @@ $this->params['breadcrumbs'][] = 'Update';
                 <div class="panel panel-default">
                         <div class="panel-heading">
                                 <h3 class="panel-title"><?= Html::encode($this->title) ?></h3>
+				<div  style="float: right"><?= Html::a('<span>Map Locations</span>', ['map-locations/index'], ['class' => 'btn btn-success']) ?></div>
+
 
 
                         </div>

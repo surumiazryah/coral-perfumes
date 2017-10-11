@@ -221,6 +221,7 @@ $country_codes = ArrayHelper::map(\common\models\CountryCode::find()->where(['st
 					}
 				} else {
 					$(".field-signupform-password_repeat ").removeClass('has-error');
+					$(".field-signupform-password_repeat div").text("");
 					$(".field-signupform-password_repeat ").addClass('has-success');
 				}
 			}
