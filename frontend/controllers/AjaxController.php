@@ -359,7 +359,7 @@ class AjaxController extends \yii\web\Controller {
                 $sessonid = '';
                 if (isset(Yii::$app->user->identity->id)) {
                     $user_id = Yii::$app->user->identity->id;
-                    $model = WishList::find()->where(['product' => $product_id])->one();
+                    $model = WishList::find()->where(['product' => $product_id, 'user_id' => $user_id])->one();
                     if (empty($model)) {
                         $model = new WishList();
                         $model->user_id = $user_id;

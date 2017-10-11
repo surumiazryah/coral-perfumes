@@ -42,7 +42,7 @@ else
                                 <div class="navigation-bar"style="text-align: center;">
                                     <ul style="text-align: center;width: 100%;padding: 5px 0px;margin: 0;list-style-type: none;background-color: #93c622;">
                                         <li style="display: inline;"><a target="_blank" style="width: 6em;text-decoration: none;color: white;padding: 0.2em 0.6em;border-right: 1px solid white;" href="http://<?= Yii::$app->request->serverName ?>/about-coral-perfumes">ABOUT US</a></li>
-  <li style="display: inline;"><a target="_blank" style="width: 6em;text-decoration: none;color: white;padding: 0.2em 0.6em;border-right: 1px solid white;" href="http://<?= Yii::$app->request->serverName ?>/product/index?featured=1">OUR PRODUCTS</a></li>
+                                        <li style="display: inline;"><a target="_blank" style="width: 6em;text-decoration: none;color: white;padding: 0.2em 0.6em;border-right: 1px solid white;" href="http://<?= Yii::$app->request->serverName ?>/product/index?featured=1">OUR PRODUCTS</a></li>
                                         <li style="display: inline;"><a target="_blank" style="width: 6em;text-decoration: none;color: white;padding: 0.2em 0.6em;border-right: 1px solid white;" href="http://<?= Yii::$app->request->serverName ?>/coral-perfumes-showrooms">SHOWROOMS</a></li>
                                         <li style="display: inline;"><a target="_blank" style="width: 6em;text-decoration: none;color: white;padding: 0.2em 0.6em;" href="http://<?= Yii::$app->request->serverName ?>/coral-perfumes-contact">CONTACT US</a></li>
                                     </ul>
@@ -57,11 +57,9 @@ else
                             <?= $content ?>
                             <hr style="border: 1px solid #93c622;">
                                 <div class="main-content" style="text-align:center;">
-                                    <p style="margin:0px;text-align: right;"><a href="mailto:info@coralperfumes.com" style="color:#1504f5;">info@coralperfumes.com</a></p>
-                                    <p style="margin:0px;text-align: right;"><a target="_blank" href="http://www.perfumedunia.com" style="color:#1504f5;">perfumedunia.com</a></p>
+                                    <p style="margin:0px;font-size: 13px;"><a href="mailto:info@coralperfumes.com" style="color:#501a8f;text-decoration: none;"><span style="font-weight: 600;">Email : </span></i>info@coralperfumes.com</a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a target="_blank" href="http://www.beta.coralperfumes.com" style="color:#501a8f;text-decoration: none;"><span style="font-weight: 600;">Web : </span>beta.coralperfumes.com</a></p>
                                     <br/>
-                                    <p style="margin-top:0px;margin-bottom: 0px;font-size: 20px;">Coral Perfumes Industry LLC, Dubai - 186887</p>
-                                    <p style="margin-top:0px;font-size: 20px;">Please click here to <a href="#">unsubscribe</a>.</p>
+                                    <p style="margin-top:0px;margin-bottom: 0px;font-size: 15px;">Coral Perfumes Industry LLC, Dubai - 186887</p>
                                 </div>
                         </td>
                     </tr>
