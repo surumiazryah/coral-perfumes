@@ -347,6 +347,7 @@ class CheckoutController extends \yii\web\Controller {
                         $promo_id = $_POST['id'];
                         $order_promotion = OrderPromotions::findOne($promo_id);
                         $promotion = \common\models\Promotions::findOne($order_promotion->promotion_id);
+                        $order_master = OrderMaster::findOne($order_promotion->order_master_id);
                         $promotion_users = explode(',', $promotion->code_used);
 
                         if (($key = array_search(Yii::$app->user->identity->id, $promotion_users)) !== false) {
@@ -355,6 +356,8 @@ class CheckoutController extends \yii\web\Controller {
                         $promotion_users = implode(',', $promotion_users);
                         $promotion->code_used = $promotion_users;
                         $promotion->save();
+                        $order_master->net_amount = $order_master->net_amount + $order_promotion->promotion_discount;
+                        $order_master->save();
                         $order_promotion->delete();
                 }
         }
