@@ -277,9 +277,9 @@ AppAsset::register($this);
                                 <li>
                                     <?= Html::a('Product Wise Report', ['/order/order-master/product-wise-report'], ['class' => 'title']) ?>
                                 </li>
-                                <!--                                <li>
-                                <?php // Html::a('Contact Us', ['/contacts/contact-us/index'], ['class' => 'title']) ?>
-                                                                </li>-->
+                                <li>
+                                    <?= Html::a('Order Wise Report', ['/order/order-master/order-report'], ['class' => 'title']) ?>
+                                </li>
                             </ul>
                         </li>
                     </ul>

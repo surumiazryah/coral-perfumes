@@ -185,4 +185,25 @@ class OrderMasterController extends Controller {
         ]);
     }
 
+    public function actionOrderReport() {
+        $searchModel = new OrderMasterSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        if (isset($_GET['OrderMasterSearch']['createdFrom'])) {
+            $from = $_GET['OrderMasterSearch']['createdFrom'];
+        } else {
+            $from = '';
+        }
+        if (isset($_GET['OrderMasterSearch']['createdTo'])) {
+            $to = $_GET['OrderMasterSearch']['createdTo'];
+        } else {
+            $to = '';
+        }
+        return $this->render('order_report', [
+                    'searchModel' => $searchModel,
+                    'dataProvider' => $dataProvider,
+                    'from' => $from,
+                    'to' => $to,
+        ]);
+    }
+
 }

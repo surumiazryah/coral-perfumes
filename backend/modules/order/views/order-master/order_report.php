@@ -13,7 +13,7 @@ use yii\jui\DatePicker;
 /* @var $searchModel common\models\OrderMasterSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Order Report';
+$this->title = 'Order Wise Report';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="order-master-index">
@@ -28,137 +28,63 @@ $this->params['breadcrumbs'][] = $this->title;
 
                 </div>
                 <div class="panel-body">
-                    <div class="row" style="margin-left: 0px;">
-                        <?php
-                        $items = \common\models\Product::findAll(['status' => 1]);
-                        ?>
-                        <?php $form = ActiveForm::begin(); ?>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label class="control-label" for="item_id">Product</label>
-                                <select id="item-id" class="form-control" name="item_id[]" aria-required="true" aria-invalid="true" multiple="multiple">
-                                    <option value="">-Choose Product-</option>
-                                    <?php foreach ($items as $item) { ?>
-                                        <option value="<?= $item->id ?>" <?php
-                                        if ($item_id != '') {
-                                            if (in_array($item->id, $item_id)) {
-                                                echo 'selected';
-                                            }
-                                        }
-                                        ?>><?= $item->product_name ?>
-                                        </option>
-                                    <?php }
-                                    ?>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label class="control-label" for="from_date">From Date</label>
-                                <?php
-                                echo DatePicker::widget([
-                                    'name' => 'from_date',
-                                    'value' => $from_date,
-                                    //'language' => 'ru',
-                                    'dateFormat' => 'yyyy-MM-dd',
-                                    'options' => ['class' => 'form-control']
-                                ]);
-                                ?>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label class="control-label" for="to_date">To Date</label>
-                                <?php
-                                echo DatePicker::widget([
-                                    'name' => 'to_date',
-                                    'value' => $to_date,
-                                    //'language' => 'ru',
-                                    'dateFormat' => 'yyyy-MM-dd',
-                                    'options' => ['class' => 'form-control']
-                                ]);
-                                ?>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <?= Html::submitButton('Search', ['class' => 'btn btn-secondary']) ?>
-                            </div>
-                        </div>
-                        <?php ActiveForm::end(); ?>
-                    </div>
-                    <div class="row" style="margin-left: 0px;">
-                        <div class="panel-body">
-                            <script type="text/javascript">
-                                $(document).ready(function ()
-                                {
-                                    $("#example-1").dataTable({
-                                        aLengthMenu: [
-                                            [10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]
-                                        ]
-                                    });
-                                });
-                            </script>
-                            <table id="example-1" class="table table-striped table-bordered" cellspacing="0" width="100%">
-                                <thead>
-                                    <tr>
-                                        <th>Order ID</th>
-                                        <th>Product</th>
-                                        <th>Total Quantity</th>
-                                        <th>Total Amount</th>
-                                        <th>Date</th>
-                                    </tr>
-                                </thead>
+                    <div class="row" style="margin-left: 0px;border-bottom: 2px solid rgba(39, 41, 42, 0.46);">
+                        <div class="col-md-6">
 
-                                <tbody>
-                                    <?php
-                                    if (!empty($model)) {
-                                        foreach ($model as $value) {
-                                            ?>
-                                            <tr style="text-align:left;" class='' id="">
-                                                <td><?= $value['order_id'] ?></td>
-                                                <td><?= $value['product_id'] ?></td>
-                                                <td><?= $value['total_quantity'] ?></td>
-                                                <td><?= $value['net_amount'] ?></td>
-                                                <td><?= $value['doc'] ?></td>
-                                            </tr>
-                                            <?php
-                                        }
-                                    }
-                                    ?>
-                                </tbody>
-                            </table>
+                            <?= $this->render('_search_order', ['model' => $searchModel, 'from' => $from, 'to' => $to]) ?>
+
                         </div>
-                        <div>
+                        <div class="col-md-6">
+                            <div class="form-group ">
+                                <table cellspacing="0" class="table table-small-font table-bordered table-striped" style="">
+                                    <tr>
+                                        <th>Total Sale</th>
+                                        <th>Total Amount</th>
+                                        <th>Amount Net Amount</th>
+                                    </tr>
+                                    <?php
+                                    $sale_total = $dataProvider->getTotalCount();
+                                    $amount_total = common\models\OrderMaster::getAmountTotal($from, $to, 'total_amount');
+                                    $net_amount_total = common\models\OrderMaster::getAmountTotal($from, $to, 'net_amount');
+                                    ?>
+                                    <tr>
+                                        <td><?= $sale_total ?></td>
+                                        <td><?= $amount_total ?></td>
+                                        <td><?= $net_amount_total ?></td>
+                                    </tr>
+                                </table>
+                            </div>
                         </div>
                     </div>
+                    <?=
+                    GridView::widget([
+                        'dataProvider' => $dataProvider,
+                        'pager' => [
+                            'firstPageLabel' => 'First',
+                            'lastPageLabel' => 'Last',
+                        ],
+                        'columns' => [
+                            ['class' => 'yii\grid\SerialColumn'],
+                            'order_id',
+                            [
+                                'attribute' => 'user_id',
+                                'label' => 'User Name',
+                                'value' => function ($data) {
+                                    if (isset($data->user_id)) {
+                                        return User::findOne($data->user_id)->first_name;
+                                    } else {
+                                        return '';
+                                    }
+                                },
+                            ],
+                            'total_amount',
+                            'net_amount',
+                            'order_date',
+                        ],
+                    ]);
+                    ?>
                 </div>
             </div>
         </div>
     </div>
 </div>
-<link rel="stylesheet" href="<?= Yii::$app->homeUrl; ?>js/datatables/dataTables.bootstrap.css">
-<script src="<?= Yii::$app->homeUrl; ?>js/datatables/js/jquery.dataTables.min.js"></script>
-
-<!-- Imported scripts on this page -->
-<script src="<?= Yii::$app->homeUrl; ?>js/datatables/dataTables.bootstrap.js"></script>
-<script src="<?= Yii::$app->homeUrl; ?>js/datatables/yadcf/jquery.dataTables.yadcf.js"></script>
-<script src="<?= Yii::$app->homeUrl; ?>js/datatables/tabletools/dataTables.tableTools.min.js"></script>
-
-<link rel="stylesheet" href="<?= Yii::$app->homeUrl; ?>js/select2/select2.css">
-<link rel="stylesheet" href="<?= Yii::$app->homeUrl; ?>js/select2/select2-bootstrap.css">
-<script src="<?= Yii::$app->homeUrl; ?>js/select2/select2.min.js"></script>
-
-
-
-<script>
-                                $(document).ready(function () {
-                                    $("#item-id").select2({
-                                        placeholder: '--Select Item--',
-                                        allowClear: true
-                                    }).on('select2-open', function ()
-                                    {
-                                        $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
-                                    });
-                                });
-</script>

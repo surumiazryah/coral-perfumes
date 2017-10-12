@@ -12,6 +12,9 @@ use common\models\OrderMaster;
  */
 class OrderMasterSearch extends OrderMaster {
 
+    public $createdFrom;
+    public $createdTo;
+
     /**
      * @inheritdoc
      */
@@ -39,6 +42,16 @@ class OrderMasterSearch extends OrderMaster {
      * @return ActiveDataProvider
      */
     public function search($params) {
+        if (!isset($params["OrderMasterSearch"]["createdFrom"])) {
+            $params["OrderMasterSearch"]["createdFrom"] = '';
+        } else {
+            $params["OrderMasterSearch"]["createdFrom"] = $params["OrderMasterSearch"]["createdFrom"] . ' 00:00:00';
+        }
+        if (!isset($params["OrderMasterSearch"]["createdTo"])) {
+            $params["OrderMasterSearch"]["createdTo"] = '';
+        } else {
+            $params["OrderMasterSearch"]["createdTo"] = $params["OrderMasterSearch"]["createdTo"] . ' 60:60:60';
+        }
         $query = OrderMaster::find()->orderBy(['id' => SORT_DESC]);
 
         // add conditions that should always apply here
@@ -76,7 +89,10 @@ class OrderMasterSearch extends OrderMaster {
         ]);
 
         $query->andFilterWhere(['like', 'order_id', $this->order_id])
-                ->andFilterWhere(['like', 'user_comment', $this->user_comment]);
+                ->andFilterWhere(['like', 'user_comment', $this->user_comment])
+                ->andFilterWhere(['>=', 'order_date', $params["OrderMasterSearch"]["createdFrom"]])
+                ->andFilterWhere(['<=', 'order_date', $params["OrderMasterSearch"]["createdTo"]]);
+        ;
 
         return $dataProvider;
     }
