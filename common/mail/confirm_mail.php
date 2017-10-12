@@ -1,5 +1,4 @@
 <?php
-
 use yii\helpers\Html;
 use common\models\OrderDetails;
 use common\models\OrderMaster;
@@ -27,39 +26,55 @@ $order_master = OrderMaster::find()->where(['order_id' => $orderid])->one();
             <div class="col-lg-8 col-md-8 col-sm-12 hidden-xs my-order-list">
 
                 <div class="orders-box">
-                    <?php
-                    foreach ($order_products as $order_product) {
-                        $product_detail = Product::find()->where(['id' => $order_product->product_id])->one();
-                        ?>
-                        <div class="ordered-pro-dtls">
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-                                <p><?= $product_detail->product_name ?></p>
-                                <?php $product_type = Fregrance::findOne($product_detail->product_type); ?>
-                                <p class="cart-pro-subheading"><?= $product_type->name;?></p>
-                                </a>
-                            </div>
+
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th class="text-center"><p class="th">Product</p></th>
+                                <th class="text-center"><p class="th">Price</p></th>
+                                <th class="text-center"><p class="th">Quantity</p></th>
+                                <th class="text-center"><p class="th">Total</p></th>
+                            </tr>
+                        </thead>
+                        <tbody>
                             <?php
-                            if ($product_detail->offer_price == '0' || $product_detail->offer_price == '') {
-                                $price = $product_detail->price;
-                            } else {
-                                $price = $product_detail->offer_price;
-                            }
-                            ?>
-                            <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 price">AED  <?= $price; ?></div>
-                            <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 price">Quantity : <?= $order_product->quantity; ?></div>
+                            foreach ($order_products as $order_product) {
+
+                                if ($order_product->item_type == 1) {
+                                    $product_detail = \common\models\CreateYourOwn::findOne($order_product->product_id);
+                                } else {
+                                    $product_detail = Product::find()->where(['id' => $order_product->product_id])->one();
+                                }
+                                ?>
+                                <tr>
+                                    <td><?= $order_product->item_type == 1 ? 'Custom Perfume' : $product_detail->product_name; ?></td>
+                                    <td><?= $order_product->amount ?></td>
+                                    <td><?= $order_product->quantity ?></td>
+                                    <td><?= $order_product->rate ?></td>
+                                </tr>
+                            <?php } ?>
+                        </tbody>
+                    </table>
+                    <div class="">
+                        <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10 shipping">
+                            <h5 class="product-heading text-right">Shipping Charges:</h5>
                         </div>
-                    <?php }
-                    ?>
-                    <div class="pro-order-detail">
-                        
-                        <?php
-                        $shipping_limit = Settings::findOne('1')->value;
-                        $shipextra = Settings::findOne('2')->value;
-                        $ship_charge = $order_master->total_amount <= $shipping_limit ? sprintf('%0.2f', $shipextra) : 0.00
-                        ?>
-                        <p class="shipping">Shipping Charge <?= $ship_charge ?> </p>
-                        <p class="order-total">Order Total: AED <?= sprintf('%0.2f', $order_master->net_amount) ?></p>
+                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 shipping-cost">
+                            <?php
+                             $shipping_limit = Settings::findOne('1')->value;
+                            $shipextra = Settings::findOne('2')->value;
+                            $ship_charge = $order_master->total_amount<= $shipping_limit ? $shipextra : 0.00
+                            ?>
+                            <p class="text-right price"><?= sprintf('%0.2f', $ship_charge) ?></p>
+                        </div>
+                        <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10 total">
+                            <h5 class="product-heading text-right">Total:</h5>
+                        </div>
+                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 total-cost">
+                            <p class="text-right price">AED <?= sprintf('%0.2f', $order_master->net_amount) ?></p>
+                        </div>
                     </div>
+                    
                 </div>
             </div>
         </div>

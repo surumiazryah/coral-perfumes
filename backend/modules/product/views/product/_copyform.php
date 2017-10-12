@@ -84,7 +84,7 @@ use dosamigos\ckeditor\CKEditor;
                     <label onclick="jQuery('#modal-5').modal('show', {backdrop: 'fade'});" class="btn btn-icon btn-white extra_btn add_brand">Add Brand</label>
                 </div>
                 <div class='col-md-4 col-sm-6 col-xs-12 '>
-                    <?= $form->field($model, 'gender_type')->dropDownList(['0' => 'Men', '1' => 'Women', '2' => 'Unisex']) ?>
+                    <?= $form->field($model, 'gender_type')->dropDownList(['0' => 'Men', '1' => 'Women', '2' => 'Unisex', '3' => 'Oriental']) ?>
                 </div>
                 <div class='col-md-4 col-sm-6 col-xs-12 '>
                     <?= $form->field($model, 'price')->textInput(['type' => 'number', 'min' => '0', 'autocomplete' => 'off']) ?>

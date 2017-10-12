@@ -92,7 +92,7 @@ use dosamigos\ckeditor\CKEditor;
                 if ($model->isNewRecord) {
                     $serial_no = \common\models\Settings::findOne(3)->value;
                     $prefix = \common\models\Settings::findOne(3)->prefix;
-                    $model->item_ean = $this->context->generateProductEan($prefix.$serial_no);
+                    $model->item_ean = $this->context->generateProductEan($prefix . $serial_no);
                 }
                 ?>
                 <div class='col-md-4 col-sm-6 col-xs-12'>
@@ -103,7 +103,7 @@ use dosamigos\ckeditor\CKEditor;
                     <label onclick="jQuery('#modal-5').modal('show', {backdrop: 'fade'});" class="btn btn-icon btn-white extra_btn add_brand">Add Brand</label>
                 </div>
                 <div class='col-md-4 col-sm-6 col-xs-12 '>
-                    <?= $form->field($model, 'gender_type')->dropDownList(['0' => 'Men', '1' => 'Women', '2' => 'Unisex']) ?>
+                    <?= $form->field($model, 'gender_type')->dropDownList(['0' => 'Men', '1' => 'Women', '2' => 'Unisex', '3' => 'Oriental']) ?>
                 </div>
                 <div class='col-md-4 col-sm-6 col-xs-12 '>
                     <?= $form->field($model, 'price')->textInput(['type' => 'number', 'min' => '0', 'autocomplete' => 'off']) ?>
@@ -119,7 +119,7 @@ use dosamigos\ckeditor\CKEditor;
                     <?= $form->field($model, 'stock')->textInput(['type' => 'number', 'min' => '0', 'autocomplete' => 'off']) ?>
                 </div>
                 <div class='col-md-4 col-sm-6 col-xs-12 '>
-                   
+
                     <?= $form->field($model, 'stock_unit')->dropDownList(ArrayHelper::map(Unit::find()->all(), 'id', 'unit_name')) ?>
                     <label onclick="jQuery('#modal-3').modal('show', {backdrop: 'fade'});" class="btn btn-icon btn-white extra_btn add_unit" attr_id="product-stock_unit">Add Unit</label>
                 </div>
@@ -231,7 +231,7 @@ use dosamigos\ckeditor\CKEditor;
                 <div class='col-md-6 col-sm-6 col-xs-12 '>
                     <?= $form->field($model, 'other_image[]')->fileInput(['multiple' => true, 'accept' => 'image/*'])->label('Gallery Images<i> (455*315)</i>') ?>
                     <?php if (!$model->isNewRecord) { ?>
-                                                                                                                                                                                                                <!--<a href=''><img src="<?= yii::$app->homeUrl ?>/../../uploads/product/1/dasda_0.jpg" width="100" alt="Delete"></a>-->
+                                                                                                                                                                                                                    <!--<a href=''><img src="<?= yii::$app->homeUrl ?>/../../uploads/product/1/dasda_0.jpg" width="100" alt="Delete"></a>-->
                         <div class="row">
                             <?php
                             $path = Yii::getAlias('@paths') . '/product/' . $model->id . '/gallery_thumb';

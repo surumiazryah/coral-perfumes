@@ -219,7 +219,7 @@ class CheckoutController extends \yii\web\Controller {
                         ->setFrom('no-replay@coralperfumes.com')
                         ->setTo($mail)
                         ->setSubject('Order Confirm');
-//        echo $message;exit;
+       echo $message;exit;
                 $message->send();
                 return TRUE;
         }

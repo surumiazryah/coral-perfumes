@@ -88,7 +88,7 @@ $(document).ready(function () {
     $(document).click(function () {
         $(".quantity").each(function () {
             var quantity = $(this).val();
-            if (quantity == '') {
+            if (quantity === '') {
                 var ids = $(this).attr('id');
                 $('#' + ids).val('1');
                 var $ids = $(this).attr('id');
@@ -337,11 +337,12 @@ function updatecart(id, quantity) {
             if ($data.msg === "success") {
                 $('.subtotal').html('AED ' + $data.subtotal);
 //                $('.total_' + id).html('AED ' + total);
+
+                hideLoader();
             }
 //
         }
     });
-    hideLoader();
 }
 /******/
 function addwishlist(button, id, closest_div) {
