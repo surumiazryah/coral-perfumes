@@ -10,6 +10,7 @@ use common\models\LoginForm;
 use common\models\AdminUsers;
 use common\models\ForgotPasswordTokens;
 use common\models\AdminPost;
+use common\models\OrderMasterSearch;
 
 /**
  * Site controller
@@ -89,12 +90,14 @@ class SiteController extends Controller {
 
     public function actionHome() {
         if (isset(Yii::$app->user->identity->id)) {
-            $products = \common\models\Product::find()->where(['<', 'stock', 3])->limit(5)->all();
+            $products = \common\models\Product::find()->where(['<', 'stock', 3])->limit(10)->all();
+            $recent_orders = \common\models\OrderMaster::find()->orderBy(['id' => SORT_DESC])->limit(10)->all();
             if (Yii::$app->user->isGuest) {
                 return $this->redirect(array('site/index'));
             }
             return $this->render('index', [
                         'products' => $products,
+                        'recent_orders' => $recent_orders,
             ]);
         } else {
             throw new \yii\web\HttpException(2000, 'Session Expired.');

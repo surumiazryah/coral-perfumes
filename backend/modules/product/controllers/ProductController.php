@@ -544,18 +544,4 @@ class ProductController extends Controller {
         return;
     }
 
-    /**
-     * Lists all product which stock less than 3.
-     * @return mixed
-     */
-    public function actionStockReport() {
-        $searchModel = new ProductSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        $dataProvider->query->andWhere(['<', 'stock', 3]);
-        return $this->render('stock-report', [
-                    'searchModel' => $searchModel,
-                    'dataProvider' => $dataProvider,
-        ]);
-    }
-
 }
