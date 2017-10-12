@@ -296,4 +296,20 @@ class UserController extends Controller {
                 }
         }
 
+        /*
+         * This function check old password
+         */
+
+        public function actionCheckPassword() {
+                if (Yii::$app->request->isAjax) {
+                        $model = User::findOne(Yii::$app->user->identity->id);
+                        if (Yii::$app->getSecurity()->validatePassword(Yii::$app->request->post('old_pwd'), $model->password_hash)) {
+                                $val = 1;
+                        } else {
+                                $val = 0;
+                        }
+                        return $val;
+                }
+        }
+
 }
