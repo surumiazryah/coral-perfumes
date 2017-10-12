@@ -117,7 +117,7 @@ $this->title = 'Continue Cart';
                                             <span class="input-group-btn data-dwn">
                                                 <button class="btn btn-default btn-info cart_quantity-minus order_button" id="<?= $cart->id; ?>" data-dir="dwn"><i class="fa fa-minus" aria-hidden="true"></i></button>
                                             </span>
-                                            <input type='number'  name='cart_quantity' class="form-control text-center" id="orderqty_<?= $cart->id; ?>" value="<?= $quantity ?>" min="1" <?= $max ?>>
+                                            <input type='number'  name='cart_quantity' class="form-control text-center ordqnty" id="orderqty_<?= $cart->id; ?>" value="<?= $quantity ?>" min="1" <?= $max ?>>
 
                                             <span class="input-group-btn data-up">
                                                 <button class="btn btn-default btn-info cart_quantity-plus order_button" id="<?= $cart->id; ?>" data-dir="up"><i class="fa fa-plus" aria-hidden="true"></i></button>
@@ -128,7 +128,7 @@ $this->title = 'Continue Cart';
                                     </div>
                                 </td>
                                 <?php $total = $price * $quantity; ?>
-                                <td class="col-lg-2 col-md-2 col-sm-2 col-xs-2 text-center price"><?php echo $total > "0" ? 'AED ' . sprintf('%0.2f', $total) : '-' ?></td>
+                                <td class="col-lg-2 col-md-2 col-sm-2 col-xs-2 text-center price  total_<?= $cart->id ?>"><?php echo $total > "0" ? 'AED ' . sprintf('%0.2f', $total) : '-' ?></td>
 
                                 <td class="col-lg-2 col-md-2 col-sm-2 col-xs-2 text-center">
                                     <?= Html::a('<button type="button" class="btn-remove"><i class="fa fa-trash-o" aria-hidden="true"></i></button>', ['checkout/remove-order?id=' . $cart->id], ['class' => 'button']) ?>
@@ -212,7 +212,7 @@ $this->title = 'Continue Cart';
                                 }
                                 if ($product->stock > 0) {
                                     ?>
-                                    <select min="0" max="5" id="orderqty2_<?= $cart->id; ?>" class="quantity" name="quantity">
+                                    <select min="0" max="5" id="orderqty2_<?= $cart->id; ?>" class="ordqnty" name="quantity">
                                         <?php
                                         $stocks = $cart->item_type == 1 ? 100 : $product->stock;
                                         for ($i = '1'; $i <= $stocks; $i++) {

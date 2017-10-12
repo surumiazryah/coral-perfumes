@@ -451,11 +451,11 @@ class CheckoutController extends \yii\web\Controller {
                 $cart->amount = $price;
                 $cart->rate = $total;
                 if ($cart->save()) {
-                    $cart_items = OrderDetails::find()->where(['order_id'=>$cart->order_id])->all();
+                    $cart_items = OrderDetails::find()->where(['order_id' => $cart->order_id])->all();
                     if (!empty($cart_items)) {
                         $subtotal = $this->total($cart_items);
                     }
-                    echo json_encode(array('msg' => 'success', 'total' => sprintf('%0.2f', $total), 'subtotal' => sprintf('%0.2f', $subtotal)));
+                    echo json_encode(array('msg' => 'success', 'quantity' => $cart->quantity, 'total' => sprintf('%0.2f', $total), 'subtotal' => sprintf('%0.2f', $subtotal)));
                 } else {
                     echo json_encode(array('msg' => 'error', 'content' => 'Cannot be Changed'));
                 }

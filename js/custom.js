@@ -299,8 +299,9 @@ $(document).ready(function () {
 
 
 });
-/* CONTINUE ORDER**************/
+/************** CONTINUE ORDER**************/
 $('.cart_quantity-plus').on('click', function () {
+    showLoader();
     var id = $(this).attr('id');
     var max = $('#orderqty_' + id).attr('max');
     var num = parseInt($('#orderqty_' + id).val());
@@ -313,6 +314,7 @@ $('.cart_quantity-plus').on('click', function () {
     }
 });
 $('.cart_quantity-minus').on('click', function () {
+    showLoader();
     var id = $(this).attr('id');
     var num = parseInt($('#orderqty_' + id).val());
     var add = parseInt(num - 1);
@@ -323,6 +325,25 @@ $('.cart_quantity-minus').on('click', function () {
         updateorder(id, quantity);
     }
 });
+ $('.ordqnty').on('change keyup', function () {
+        showLoader();
+        var quantity = this.value
+        var $ids = $(this).attr('id');
+        var ids = $ids.split('_');
+        var id = ids['1'];
+        var price = $('.price_' + id).html();
+//        var max = $(this).attr('max');
+        if (quantity != '' && parseInt(quantity) > '0') {
+            var total = (parseInt(price) * parseInt(quantity));
+            $('#orderqty_' + id).val(parseInt(quantity));
+            $("#orderqty2_" + id).val(parseInt(quantity));
+            updateorder(id, quantity);
+        } else if (quantity != '') {
+            quantity = '1';
+            updateorder(id, quantity);
+            $('#orderqty_' + id).val('1');
+        }
+    });
 ////*******///////
 /*******************************************************************************************************************/
 function removewishlist(list_id, canname) {
@@ -378,6 +399,8 @@ function updateorder(id, quantity) {
             var $data = JSON.parse(data);
             if ($data.msg === "success") {
                 $('.total_' + id).html('AED ' + $data.total);
+                $('#orderqty_' + id).val($data.quantity);
+                $('#orderqty2_' + id).val($data.quantity);
                 $('.subtotal').html('AED ' + $data.subtotal);
                 hideLoader();
             }
