@@ -142,14 +142,14 @@ class OrderMasterController extends Controller {
         }
     }
 
-    public function actionOrderReport() {
+    public function actionProductWiseReport() {
         if (Yii::$app->request->post()) {
             $from = $_POST['from_date'] . ' 00:00:00';
             $to = $_POST['to_date'] . ' 60:60:60';
             $item_id = $_POST['item_id'];
             if (empty($item_id)) {
                 $model = (new \yii\db\Query())
-                        ->select(['order_id,product_id,SUM(rate) as net_amount,SUM(quantity) as total_quantity,doc'])
+                        ->select(['product_id,SUM(rate) as net_amount,SUM(quantity) as total_quantity'])
                         ->from('order_details')
                         ->where(['>=', 'doc', $from])
                         ->andWhere(['<=', 'doc', $to])
@@ -157,7 +157,7 @@ class OrderMasterController extends Controller {
                         ->all();
             } else {
                 $model = (new \yii\db\Query())
-                        ->select(['order_id,product_id,SUM(rate) as net_amount,SUM(quantity) as total_quantity,doc'])
+                        ->select(['product_id,SUM(rate) as net_amount,SUM(quantity) as total_quantity'])
                         ->from('order_details')
                         ->where(['in', 'product_id', $item_id])
                         ->andWhere(['>=', 'doc', $from])
@@ -172,12 +172,12 @@ class OrderMasterController extends Controller {
             $to_date = date('Y-m-d');
             $item_id = '';
             $model = (new \yii\db\Query())
-                    ->select(['order_id,product_id,SUM(rate) as net_amount,SUM(quantity) as total_quantity,doc'])
+                    ->select(['product_id,SUM(rate) as net_amount,SUM(quantity) as total_quantity'])
                     ->from('order_details')
                     ->groupBy('product_id')
                     ->all();
         }
-        return $this->render('order_report', [
+        return $this->render('product_wise_report', [
                     'model' => $model,
                     'from_date' => $from_date,
                     'to_date' => $to_date,

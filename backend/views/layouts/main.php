@@ -269,7 +269,18 @@ AppAsset::register($this);
                             <?= Html::a('<i class="fa fa-cube"></i><span class="title">Promotions</span>', ['/promotions/promotions/index'], ['class' => 'title']) ?>
                         </li>
                         <li>
-                            <?= Html::a('<i class="fa fa-bars"></i><span class="title">Report</span>', ['/order/order-master/order-report'], ['class' => 'title']) ?>
+                            <a href="">
+                                <i class="fa fa-bars"></i>
+                                <span class="title">Reports</span>
+                            </a>
+                            <ul>
+                                <li>
+                                    <?= Html::a('Product Wise Report', ['/order/order-master/product-wise-report'], ['class' => 'title']) ?>
+                                </li>
+                                <!--                                <li>
+                                <?php // Html::a('Contact Us', ['/contacts/contact-us/index'], ['class' => 'title']) ?>
+                                                                </li>-->
+                            </ul>
                         </li>
                     </ul>
 
