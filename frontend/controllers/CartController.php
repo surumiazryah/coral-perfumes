@@ -154,18 +154,18 @@ class CartController extends \yii\web\Controller {
 //                        echo 'Cart box is Empty';
                         echo '<div style="padding: 25px 0px; display: flow-root;">
                                <a href="' . yii::$app->homeUrl . '"><div class="col-md-12 empty-img text-center" >
-                               <img style="margin: 0 auto; float: none; left: 0px; right: 0px; vertical-align: middle; margin-bottom: 10px;" class="img-responsive" src="' . Yii::$app->homeUrl . 'images/empty-cart.png"/>
+                               <img style="margin: 0 auto; float: none; left: 0px; right: 0px; vertical-align: middle; margin-bottom: 10px;" class="img-responsive" src="' . Yii::$app->homeUrl . 'images/empty-cart.jpg"/>
                                </div>
-                              <span class="col-md-12 text-center">Cart is Empty. Click to Continue</span></a>
+                              <span class="col-md-12 text-center">Cart is Empty. Start Shopping.</span></a>
                               </div>';
                     }
                 } else {
 //                    echo 'Cart box is Empty';
                     echo '<div style="padding: 25px 0px; display: flow-root;">
                                <a href="' . yii::$app->homeUrl . '"><div class="col-md-12 empty-img text-center" >
-                               <img style="margin: 0 auto; float: none; left: 0px; right: 0px; vertical-align: middle; margin-bottom: 10px;" class="img-responsive" src="' . Yii::$app->homeUrl . 'images/empty-cart.png"/>
+                               <img style="margin: 0 auto; float: none; left: 0px; right: 0px; vertical-align: middle; margin-bottom: 10px;" class="img-responsive" src="' . Yii::$app->homeUrl . 'images/empty-cart.jpg"/>
                                </div>
-                              <span class="col-md-12 text-center">Cart is Empty. Click to Continue</span></a>
+                              <span class="col-md-12 text-center">Cart is Empty. Start Shopping.</span></a>
                               </div>';
                 }
             }
@@ -484,9 +484,9 @@ class CartController extends \yii\web\Controller {
 //            echo 'Cart box is Empty';
             echo '<div style="padding: 25px 0px; display: flow-root;">
                                <a href="' . yii::$app->homeUrl . '"><div class="col-md-12 empty-img text-center" >
-                               <img style="margin: 0 auto; float: none; left: 0px; right: 0px; vertical-align: middle; margin-bottom: 10px;" class="img-responsive" src="' . Yii::$app->homeUrl . 'images/empty-cart.png"/>
+                               <img style="margin: 0 auto; float: none; left: 0px; right: 0px; vertical-align: middle; margin-bottom: 10px;" class="img-responsive" src="' . Yii::$app->homeUrl . 'images/empty-cart.jpg"/>
                                </div>
-                              <span class="col-md-12 text-center">Cart is Empty. Click to Continue</span></a>
+                              <span class="col-md-12 text-center">Cart is Empty. Start Shopping.</span></a>
                               </div>';
 //                   Html::a ('<button class="green2">Continue shopping</button>,'.['site/index'].','.['class' => 'button']).
 //                </div>';

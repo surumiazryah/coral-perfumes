@@ -5,7 +5,7 @@ use common\models\Product;
 //use common\models\Settings;
 use common\models\Brand;
 
-$this->title = 'Shopping Cart';
+$this->title = 'Continue Cart';
 ?>
 <style>
     .th{
@@ -19,10 +19,11 @@ $this->title = 'Shopping Cart';
 
 <div class="container">
     <div class="breadcrumb">
-        <span class="current-page">Shopping cart</span>
+        <span class="current-page">My Orders</span>
         <ol class="path">
             <li><?= Html::a('<span>Home</span>', ['/site/index'], ['class' => '']) ?></li>
-            <li class="active">Cart</li>
+            <li><?= Html::a('<span>My account</span>', ['/myaccounts/user/index'], ['class' => '']) ?></li>
+            <li class="active">Continue Order</li>
         </ol>
     </div>
 </div>
@@ -43,7 +44,7 @@ $this->title = 'Shopping Cart';
                     </thead>
                     <tbody>
                         <?php
-                        foreach ($carts as $cart) {
+                        foreach ($items as $cart) {
                             ?>
                             <tr>
                                 <?php
@@ -97,30 +98,40 @@ $this->title = 'Shopping Cart';
                                     }
                                 }
                                 ?>
-                                <?php // $price = ($product->offer_price == '0' ? $product->price : $product->offer_price);     ?>
-                                <td class="col-lg-2 col-md-2 col-sm-2 col-xs-2 text-center price">AED <span class="price_<?= $cart->id ?>"><?= sprintf('%0.2f', $price); ?></span></td>
+                                <td class="col-lg-2 col-md-2 col-sm-2 col-xs-2 text-center price">AED <span><?= sprintf('%0.2f', $price); ?></span></td>
                                 <td class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="text-align: center">
                                     <div class="input-group number-spinner">
-                                        <span class="input-group-btn data-dwn">
-                                            <button class="btn btn-default btn-info cart_quantity cart_quantity-minus" id="<?= $cart->id; ?>" data-dir="dwn"><i class="fa fa-minus" aria-hidden="true"></i></button>
-                                        </span>
                                         <?php
                                         if ($cart->item_type == 1) {
                                             $max = '';
                                         } else {
                                             $max = 'Max="' . $product->stock . '"';
+                                            if ($product->stock > '0' && $product->stock < $cart->quantity) {
+                                                $quantity = $product->stock;
+                                            } else if ($product->stock >= $cart->quantity) {
+                                                $quantity = $cart->quantity;
+                                            }
                                         }
                                         ?>
-                                        <input type='number'  name='cart_quantity' class="form-control text-center quantity" id="quantity_<?= $cart->id; ?>" value="<?= $cart->quantity ?>" min="1" <?= $max ?>>
-                                        <span class="input-group-btn data-up">
-                                            <button class="btn btn-default btn-info cart_quantity cart_quantity-plus" id="<?= $cart->id; ?>" data-dir="up"><i class="fa fa-plus" aria-hidden="true"></i></button>
-                                        </span>
+                                        <?php if ($cart->item_type != 1 && $product->stock != 0) { ?>
+                                            <span class="input-group-btn data-dwn">
+                                                <button class="btn btn-default btn-info cart_quantity-minus order_button" id="<?= $cart->id; ?>" data-dir="dwn"><i class="fa fa-minus" aria-hidden="true"></i></button>
+                                            </span>
+                                            <input type='number'  name='cart_quantity' class="form-control text-center" id="orderqty_<?= $cart->id; ?>" value="<?= $quantity ?>" min="1" <?= $max ?>>
+
+                                            <span class="input-group-btn data-up">
+                                                <button class="btn btn-default btn-info cart_quantity-plus order_button" id="<?= $cart->id; ?>" data-dir="up"><i class="fa fa-plus" aria-hidden="true"></i></button>
+                                            </span>
+                                        <?php } else { ?>
+                                            Out Of Stock
+                                        <?php } ?>
                                     </div>
                                 </td>
-                                <?php $total = $price * $cart->quantity; ?>
-                                <td class="col-lg-2 col-md-2 col-sm-2 col-xs-2 text-center price total_<?= $cart->id ?>">AED <?= sprintf('%0.2f', $total) ?></td>
+                                <?php $total = $price * $quantity; ?>
+                                <td class="col-lg-2 col-md-2 col-sm-2 col-xs-2 text-center price"><?php echo $total > "0" ? 'AED ' . sprintf('%0.2f', $total) : '-' ?></td>
+
                                 <td class="col-lg-2 col-md-2 col-sm-2 col-xs-2 text-center">
-                                    <?= Html::a('<button type="button" class="btn-remove"><i class="fa fa-trash-o" aria-hidden="true"></i></button>', ['cart/cart_remove?id=' . $cart->id], ['class' => 'button']) ?>
+                                    <?= Html::a('<button type="button" class="btn-remove"><i class="fa fa-trash-o" aria-hidden="true"></i></button>', ['checkout/remove-order?id=' . $cart->id], ['class' => 'button']) ?>
                                 </td>
                             </tr>
                             <?php
@@ -130,13 +141,11 @@ $this->title = 'Shopping Cart';
                 </table>
                 <div class="clearfix"></div>
                 <div class="lit-blue sub-total">
-                    <div class="col-md-12"><h4>Subtotal:<span class="price subtotal">AED <?= $subtotal?></span></h4></div>
+                    <div class="col-md-12"><h4>Subtotal:<span class="price subtotal">AED <?= $subtotal ?></span></h4></div>
                     <div class="col-md-12"><span class="message">Shipping, taxes, and discounts will be calculated at checkout.</span></div>
                     <br/>
                     <div class="col-md-12">
-                        <!--<a  href="our-products.php"><button class="start-shopping">Continue shopping</button></a>-->
-                        <?= Html::a('<button class="start-shopping">Continue shopping</button>', ['site/index'], ['class' => '']) ?>
-                        <?= Html::a('<button class="green2">check out</button>', ['cart/checkout'], ['class' => 'button']) ?>
+                        <?= Html::a('<button class="green2">check out</button>', ['checkout/proceed'], ['class' => 'button']) ?>
                         <!--<a  href="checkout.php"> <button class="green2">check out</button></a>-->
                     </div>
                 </div>
@@ -144,7 +153,7 @@ $this->title = 'Shopping Cart';
 
             <div class=" hidden-lg hidden-md hidden-sm col-xs-12 mob-car-list">
                 <?php
-                foreach ($carts as $cart) {
+                foreach ($items as $cart) {
                     ?>
                     <div class="media">
                         <?php
@@ -166,7 +175,7 @@ $this->title = 'Shopping Cart';
                         }
                         ?>
                         <div class="track">
-                            <?= Html::a('<button title="Remove From Cart" class="remove-cart"><i class="fa fa-times" aria-hidden="true"></i></button>', ['cart/cart_remove?id=' . $cart->id], ['class' => 'button']) ?>
+                            <?= Html::a('<button title="Remove From Order" class="remove-order"><i class="fa fa-times" aria-hidden="true"></i></button>', ['checkout/remove-order?id=' . $cart->id], ['class' => 'button']) ?>
 
                             <!--<button class="add-cart green2">add to cart</button>-->
                         </div>
@@ -174,7 +183,6 @@ $this->title = 'Shopping Cart';
                         <div class="col-xs-7">
                             <h4 class="product-heading"><a href="#"><?= $cart->item_type == 1 ? $product->label_1 : $product->product_name; ?></a></h4>
                             <h5 class="brand-name"><a href="#"><?= $cart->item_type == 1 ? $product->label_2 : Brand::findOne($product->brand)->brand; ?></a></h5>
-                            <!--<p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem.</p>-->
                             <div class="col-xs-4 pad-0">
                                 <p><strong>Price</strong></p>
                             </div>
@@ -196,17 +204,30 @@ $this->title = 'Shopping Cart';
                                 <p><strong>Quantity</strong></p>
                             </div>
                             <div class="col-xs-7 text-center">
-                                <select min="0" max="5" id="quantity2_<?= $cart->id; ?>" class="quantity" name="quantity">
-                                    <?php
-                                    $stocks = $cart->item_type == 1 ? 100 : $product->stock;
-                                    for ($i = '1'; $i <= $stocks; $i++) {
-                                        ?>
-                                        <option  <?php if ($i == $cart->quantity) { ?>selected="selected"<?php } ?>value="<?= $i ?>"><?= $i ?></option>
-                                    <?php }
+                                <?php
+                                 if ($product->stock >= $cart->quantity) {
+                                    $quantity = $cart->quantity;
+                                }else{
+                                    $quantity = $product->stock;
+                                }
+                                if ($product->stock > 0) {
                                     ?>
+                                    <select min="0" max="5" id="orderqty2_<?= $cart->id; ?>" class="quantity" name="quantity">
+                                        <?php
+                                        $stocks = $cart->item_type == 1 ? 100 : $product->stock;
+                                        for ($i = '1'; $i <= $stocks; $i++) {
+                                            ?>
+                                            <option  <?php if ($i == $quantity) { ?>selected="selected"<?php } ?>value="<?= $i ?>"><?= $i ?></option>
+                                        <?php }
+                                        ?>
 
 
-                                </select>
+                                    </select>
+                                    <?php
+                                } else {
+                                    echo 'Out Of Stock';
+                                }
+                                ?>
                             </div>
                             <div class="clearfix"></div>
                         </div>
@@ -215,8 +236,8 @@ $this->title = 'Shopping Cart';
                                 <p><strong>Item Total</strong></p>
                             </div>
                             <div class="col-xs-7 amount">
-                                <?php $total = $price * $cart->quantity; ?>
-                                <p class="text-right total_<?= $cart->id ?>">AED <?= sprintf('%0.2f', $total)?></p>
+                                <?php $total = $price * $quantity; ?>
+                                <p class="text-right total_<?= $cart->id ?>"><?php echo $total > "0" ? 'AED ' . sprintf('%0.2f', $total) : '-' ?></p>
                             </div>
                         </div>
                     </div>
@@ -230,8 +251,7 @@ $this->title = 'Shopping Cart';
 
             <div class="lit-blue mob-checkout-buttons sub-total hidden-lg hidden-md hidden-sm">
                 <div class="col-md-12">
-                    <?= Html::a('<button class="green2">Continue shopping</button>', ['site/index'], ['class' => 'button']) ?>
-                    <?= Html::a('<button class="green2">check out</button>', ['cart/proceed'], ['class' => 'button']) ?>
+                    <?= Html::a('<button class="green2">check out</button>', ['checkout/proceed'], ['class' => 'button']) ?>
                     <!--<a  href="checkout.php"> <button class="green2">check out</button></a>-->
                 </div>
             </div>
@@ -244,23 +264,5 @@ $this->title = 'Shopping Cart';
 <div class="pad-30 hidden-xs"></div>
 <script>
     $(document).ready(function () {
-
-        $('.cart_quantity-plus').on('click', function () {
-            var id = $(this).attr('id');
-            var max = $('#quantity_' + id).attr('max');
-            var num = parseInt($('#quantity_' + id).val());
-            var add = parseInt(num + 1);
-            if (add <= max) {
-                $('#quantity_' + id).val(add);
-            }
-        });
-        $('.cart_quantity-minus').on('click', function () {
-            var id = $(this).attr('id');
-            var num = parseInt($('#quantity_' + id).val());
-            var add = parseInt(num - 1);
-            if (add >= 1) {
-                $('#quantity_' + id).val(add);
-            }
-        });
     });
 </script>

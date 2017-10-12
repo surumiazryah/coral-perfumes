@@ -299,7 +299,32 @@ $(document).ready(function () {
 
 
 });
-/******/
+/* CONTINUE ORDER**************/
+$('.cart_quantity-plus').on('click', function () {
+    var id = $(this).attr('id');
+    var max = $('#orderqty_' + id).attr('max');
+    var num = parseInt($('#orderqty_' + id).val());
+    var add = parseInt(num + 1);
+    if (add <= max) {
+        $('#orderqty_' + id).val(add);
+        var quantity = add;
+        $("#orderqty2_" + id).val(parseInt(quantity));
+        updateorder(id, quantity);
+    }
+});
+$('.cart_quantity-minus').on('click', function () {
+    var id = $(this).attr('id');
+    var num = parseInt($('#orderqty_' + id).val());
+    var add = parseInt(num - 1);
+    if (add >= 1) {
+        $('#orderqty_' + id).val(add);
+        var quantity = add;
+        $("#orderqty2_" + id).val(parseInt(quantity));
+        updateorder(id, quantity);
+    }
+});
+////*******///////
+/*******************************************************************************************************************/
 function removewishlist(list_id, canname) {
     $.ajax({
         url: homeUrl + 'cart/remove-wishlist',
@@ -341,6 +366,21 @@ function updatecart(id, quantity) {
                 hideLoader();
             }
 //
+        }
+    });
+}
+function updateorder(id, quantity) {
+    $.ajax({
+        type: "POST",
+        url: homeUrl + 'checkout/updatecart',
+        data: {cartid: id, quantity: quantity},
+        success: function (data) {
+            var $data = JSON.parse(data);
+            if ($data.msg === "success") {
+                $('.total_' + id).html('AED ' + $data.total);
+                $('.subtotal').html('AED ' + $data.subtotal);
+                hideLoader();
+            }
         }
     });
 }

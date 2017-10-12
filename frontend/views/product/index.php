@@ -112,6 +112,19 @@ $brands_sub = Category::find()->where(['status' => 1, 'main_category' => 2])->al
 						   echo $keyword;
 					   }
 					   ?>">Unisex</a>
+                                <a class="btn btn-primary btn-sm <?= (!empty($gender_params['type']) && $gender_params['type'] == 3) ? 'active' : 'notActive' ?> gender-select" data-toggle="happy" data-title="N" id="3" pro_cat="<?php
+					if (isset($id)) {
+						echo $id;
+					}
+					?>"main-categ="<?= $main_categry ?>" featured="<?php
+					   if (isset($featured_status)) {
+						   echo $featured_status;
+					   }
+					   ?>" keyword="<?php
+					   if (isset($keyword)) {
+						   echo $keyword;
+					   }
+					   ?>">Oriental</a>
 					<a class="btn btn-primary btn-sm notActive gender-select" data-toggle="happy" data-title="N" id="" pro_cat="<?php
 					if (isset($id)) {
 						echo $id;
@@ -165,6 +178,19 @@ $brands_sub = Category::find()->where(['status' => 1, 'main_category' => 2])->al
 						   echo $keyword;
 					   }
 					   ?>">Unisex</a>
+					<a class="btn btn-primary btn-sm notActive gender-select" data-toggle="happy" data-title="N" id="3" pro_cat="<?php
+					if (isset($id)) {
+						echo $id;
+					}
+					?>"main-categ="<?= $main_categry ?>"featured="<?php
+					   if (isset($featured_status)) {
+						   echo $featured_status;
+					   }
+					   ?>" keyword="<?php
+					   if (isset($keyword)) {
+						   echo $keyword;
+					   }
+					   ?>">Oriental</a>
 					<a class="btn btn-primary btn-sm active gender-select" data-toggle="happy" data-title="N" id="" pro_cat="<?php
 					if (isset($id)) {
 						echo $id;

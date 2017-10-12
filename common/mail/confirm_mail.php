@@ -18,10 +18,10 @@ $order_master = OrderMaster::find()->where(['order_id' => $orderid])->one();
     </head>
 
     <body>
-        <div class="mail-body" style="margin: auto;width: 50%;border: 1px solid #9e9e9e;">
+        <div class="mail-body" style="margin: auto;width: 100%;border: 1px solid #9e9e9e;">
             <div class="content" style="margin-left: 40px;">
                 <h2 style="text-align: center;">ORDER SUCCESSFULLY CONFIRMED</h2>
-                <p style="text-align: center;">Your order is successfully Confirmed. Thanks For Purchasing From Us. Your Order Id : <h3><?= $orderid ?></h3></p>
+                <p style="text-align: center;">Your order is successfully Confirmed. Thanks For Purchasing From Us. Your Order Id : <h2><?= $orderid ?></h2></p>
             </div>
             <div class="col-lg-8 col-md-8 col-sm-12 hidden-xs my-order-list">
 

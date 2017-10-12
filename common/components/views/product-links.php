@@ -34,8 +34,9 @@ use common\models\Fregrance;
             <?php }
             ?>
             <?php if ($model->stock_availability != 1 || $model->stock < 1) { ?>
-                <div class="offer-tag">
-                    <img src="<?= Yii::$app->homeUrl ?>images/off-tag-bg.png" width="100%"/><span>Out Of Stock</span>
+               
+                <div class="outofstock">  
+                    <p>OUT OF STOCk</p>     
                 </div>
             <?php } ?>
         </a>

@@ -19,7 +19,7 @@ use common\components\EmptyDataWidget;
         <ol class="path">
             <li><?= Html::a('<span>Home</span>', ['/site/index'], ['class' => '']) ?></li>
             <li><?= Html::a('<span>My account</span>', ['/myaccounts/user/index'], ['class' => '']) ?></li>
-            <li class="active">Wish List</li>
+            <li class="active">My Orders</li>
         </ol>
     </div>
 </div>
