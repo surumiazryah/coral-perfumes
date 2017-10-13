@@ -52,6 +52,62 @@ class OrderMasterSearch extends OrderMaster {
         } else {
             $params["OrderMasterSearch"]["createdTo"] = $params["OrderMasterSearch"]["createdTo"] . ' 60:60:60';
         }
+        $query = OrderMaster::find()->orderBy(['id' => SORT_DESC]);
+
+        // add conditions that should always apply here
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'sort' => ['defaultOrder' => ['id' => SORT_DESC]]
+        ]);
+
+        $this->load($params);
+
+        if (!$this->validate()) {
+            // uncomment the following line if you do not want to return any records when validation fails
+            // $query->where('0=1');
+            return $dataProvider;
+        }
+
+        // grid filtering conditions
+        $query->andFilterWhere([
+            'id' => $this->id,
+            'user_id' => $this->user_id,
+            'total_amount' => $this->total_amount,
+            'net_amount' => $this->net_amount,
+            'order_date' => $this->order_date,
+            'ship_address_id' => $this->ship_address_id,
+            'bill_address_id' => $this->bill_address_id,
+            'currency_id' => $this->currency_id,
+            'payment_mode' => $this->payment_mode,
+            'admin_comment' => $this->admin_comment,
+            'payment_status' => $this->payment_status,
+            'admin_status' => $this->admin_status,
+            'doc' => $this->doc,
+            'shipping_method' => $this->shipping_method,
+            'status' => $this->status,
+        ]);
+
+        $query->andFilterWhere(['like', 'order_id', $this->order_id])
+                ->andFilterWhere(['like', 'user_comment', $this->user_comment])
+                ->andFilterWhere(['>=', 'order_date', $params["OrderMasterSearch"]["createdFrom"]])
+                ->andFilterWhere(['<=', 'order_date', $params["OrderMasterSearch"]["createdTo"]]);
+        ;
+
+        return $dataProvider;
+    }
+
+    public function search1($params) {
+        if (!isset($params["OrderMasterSearch"]["createdFrom"])) {
+            $params["OrderMasterSearch"]["createdFrom"] = '';
+        } else {
+            $params["OrderMasterSearch"]["createdFrom"] = $params["OrderMasterSearch"]["createdFrom"] . ' 00:00:00';
+        }
+        if (!isset($params["OrderMasterSearch"]["createdTo"])) {
+            $params["OrderMasterSearch"]["createdTo"] = '';
+        } else {
+            $params["OrderMasterSearch"]["createdTo"] = $params["OrderMasterSearch"]["createdTo"] . ' 60:60:60';
+        }
         $query = OrderMaster::find()->where(['status' => 4])->andWhere(['<>', 'status', 5])->andWhere(['<>', 'admin_status', 5])->orderBy(['id' => SORT_DESC]);
 
         // add conditions that should always apply here

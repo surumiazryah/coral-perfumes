@@ -51,7 +51,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'format' => 'raw',
                                     'value' => function ($data) {
                                         if (isset($data->order_id)) {
-                                            return \yii\helpers\Html::a($data->order_id, ['/order/order-master/view', 'id' => $data->order_id]);
+                                            return \yii\helpers\Html::a($data->order_id, ['/order/order-master/view', 'id' => $data->order_id], ['target' => '_blank']);
                                         } else {
                                             return '';
                                         }
@@ -63,7 +63,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'filter' => ArrayHelper::map(User::find()->all(), 'id', 'first_name'),
                                     'value' => function ($data) {
                                         $name = User::findOne($data->user_id);
-                                        return \yii\helpers\Html::a($name->first_name . ' ' . $name->last_name, ['/user/user/update', 'id' => $data->user_id]);
+                                        return \yii\helpers\Html::a($name->first_name . ' ' . $name->last_name, ['/user/user/update', 'id' => $data->user_id], ['target' => '_blank']);
                                     },
                                 ],
                                 'net_amount',

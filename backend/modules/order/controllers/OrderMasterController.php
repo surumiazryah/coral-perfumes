@@ -49,7 +49,7 @@ class OrderMasterController extends Controller {
      */
     public function actionIndex() {
         $searchModel = new OrderMasterSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider = $searchModel->search1(Yii::$app->request->queryParams);
 //        $dataProvider->query->andWhere(['status' => '4'])->orWhere(['status' => '5']);
 
         return $this->render('index', [
@@ -214,7 +214,7 @@ class OrderMasterController extends Controller {
      */
     public function actionOrderReport() {
         $searchModel = new OrderMasterSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider = $searchModel->search1(Yii::$app->request->queryParams);
         if (isset($_GET['OrderMasterSearch']['createdFrom'])) {
             $from = $_GET['OrderMasterSearch']['createdFrom'];
         } else {

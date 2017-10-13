@@ -108,11 +108,19 @@ use common\models\OrderMaster;
                             foreach ($recent_orders as $recent) {
                                 ?>
                                 <tr>
-                                    <td><?= $recent->order_id ?></td>
                                     <td>
-                                        <?php
-                                        if (isset($recent->user_id)) {
-                                            echo common\models\User::findOne($recent->user_id)->first_name;
+                                        <?php if (isset($recent->order_id)) { ?>
+                                            <?= Html::a($recent->order_id, ['/order/order-master/view', 'id' => $recent->order_id], ['class' => '', 'target' => '_blank']) ?>
+                                            <?php
+                                        } else {
+                                            echo '';
+                                        }
+                                        ?>
+                                    </td>
+                                    <td>
+                                        <?php if (isset($recent->user_id)) { ?>
+                                            <?= Html::a(\common\models\User::findOne($recent->user_id)->first_name, ['/user/user/update', 'id' => $recent->user_id], ['class' => '', 'target' => '_blank']) ?>
+                                            <?php
                                         } else {
                                             echo '';
                                         }
@@ -190,7 +198,7 @@ use common\models\OrderMaster;
                 </table>
             </div>
             <!--            <div>
-            <?php // Html::a('<i class="fa-share"></i><span> View More</span>', ['product/product/stock-report'], ['class' => 'btn btn-blue btn-icon btn-icon-standalone btn-icon-standalone-right', 'style' => 'margin-top: 8px;float:right;']) ?>
+            <?php // Html::a('<i class="fa-share"></i><span> View More</span>', ['product/product/stock-report'], ['class' => 'btn btn-blue btn-icon btn-icon-standalone btn-icon-standalone-right', 'style' => 'margin-top: 8px;float:right;'])  ?>
                         </div>-->
         </div>
 
