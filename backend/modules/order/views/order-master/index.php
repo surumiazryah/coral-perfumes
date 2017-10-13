@@ -46,15 +46,21 @@ $this->params['breadcrumbs'][] = $this->title;
                             },
                             'columns' => [
                                 ['class' => 'yii\grid\SerialColumn'],
-                                'order_id',
+                                [
+                                    'attribute' => 'order_id',
+                                    'format' => 'raw',
+                                    'value' => function ($data) {
+                                        if (isset($data->order_id)) {
+                                            return \yii\helpers\Html::a($data->order_id, ['/order/order-master/view', 'id' => $data->order_id]);
+                                        } else {
+                                            return '';
+                                        }
+                                    },
+                                ],
                                 [
                                     'attribute' => 'user_id',
                                     'format' => 'raw',
                                     'filter' => ArrayHelper::map(User::find()->all(), 'id', 'first_name'),
-//                                    'value' => function($data) {
-//                                        $name = User::findOne($data->user_id);
-//                                        return $name->first_name . ' ' . $name->last_name;
-//                                    }
                                     'value' => function ($data) {
                                         $name = User::findOne($data->user_id);
                                         return \yii\helpers\Html::a($name->first_name . ' ' . $name->last_name, ['/user/user/update', 'id' => $data->user_id]);

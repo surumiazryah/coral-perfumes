@@ -142,10 +142,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                             ?>
                                             <tr style="text-align:left;" class='' id="">
                                                 <td>
-                                                    <?php
-                                                    if (isset($value['product_id'])) {
-                                                        echo \common\models\Product::findOne($value['product_id'])->product_name;
-                                                    }
+                                                    <?php if (isset($value['product_id'])) { ?>
+                                                        <?= Html::a(\common\models\Product::findOne($value['product_id'])->product_name, ['/product/product/update', 'id' => $value['product_id']], ['class' => '']) ?>
+                                                    <?php }
                                                     ?>
                                                 </td>
                                                 <td><?= $value['total_quantity'] ?></td>

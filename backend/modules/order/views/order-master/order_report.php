@@ -65,13 +65,25 @@ $this->params['breadcrumbs'][] = $this->title;
                         ],
                         'columns' => [
                             ['class' => 'yii\grid\SerialColumn'],
-                            'order_id',
+                            [
+                                'attribute' => 'order_id',
+                                'format' => 'raw',
+                                'value' => function ($data) {
+                                    if (isset($data->order_id)) {
+                                        return \yii\helpers\Html::a($data->order_id, ['/order/order-master/view', 'id' => $data->order_id]);
+                                    } else {
+                                        return '';
+                                    }
+                                },
+                            ],
                             [
                                 'attribute' => 'user_id',
                                 'label' => 'User Name',
+                                'format' => 'raw',
                                 'value' => function ($data) {
                                     if (isset($data->user_id)) {
-                                        return User::findOne($data->user_id)->first_name;
+                                        $name = User::findOne($data->user_id);
+                                        return \yii\helpers\Html::a($name->first_name . ' ' . $name->last_name, ['/user/user/update', 'id' => $data->user_id]);
                                     } else {
                                         return '';
                                     }
