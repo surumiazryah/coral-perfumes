@@ -91,7 +91,7 @@ class SiteController extends Controller {
     public function actionHome() {
         if (isset(Yii::$app->user->identity->id)) {
             $products = \common\models\Product::find()->where(['<', 'stock', 3])->limit(10)->all();
-            $recent_orders = \common\models\OrderMaster::find()->orderBy(['id' => SORT_DESC])->limit(10)->all();
+            $recent_orders = \common\models\OrderMaster::find()->where(['status' => 4])->andWhere(['<>', 'status', 5])->andWhere(['<>', 'admin_status', 5])->orderBy(['id' => SORT_DESC])->limit(10)->all();
             if (Yii::$app->user->isGuest) {
                 return $this->redirect(array('site/index'));
             }

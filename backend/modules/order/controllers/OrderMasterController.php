@@ -128,6 +128,10 @@ class OrderMasterController extends Controller {
         }
     }
 
+    /**
+     * This function change admin status
+     * @return mixed
+     */
     public function actionChangeAdminStatus() {
         if (yii::$app->request->isAjax) {
             $id = Yii::$app->request->post()['id'];
@@ -142,17 +146,28 @@ class OrderMasterController extends Controller {
         }
     }
 
+    /**
+     * This function show product wise report
+     * Data taken from order details table
+     * @return mixed
+     */
     public function actionProductWiseReport() {
         if (Yii::$app->request->post()) {
             $from = $_POST['from_date'] . ' 00:00:00';
             $to = $_POST['to_date'] . ' 60:60:60';
             $item_id = $_POST['item_id'];
+            $master = OrderMaster::find()->select('id')->where(['status' => 4])->andWhere(['<>', 'status', 5])->andWhere(['<>', 'admin_status', 5])->asArray()->all();
+            $arr = [];
+            foreach ($master as $value) {
+                $arr[] = $value['id'];
+            }
             if (empty($item_id)) {
                 $model = (new \yii\db\Query())
                         ->select(['product_id,SUM(rate) as net_amount,SUM(quantity) as total_quantity'])
                         ->from('order_details')
                         ->where(['>=', 'doc', $from])
                         ->andWhere(['<=', 'doc', $to])
+                        ->andWhere(['in', 'master_id', $arr])
                         ->groupBy('product_id')
                         ->all();
             } else {
@@ -162,18 +177,25 @@ class OrderMasterController extends Controller {
                         ->where(['in', 'product_id', $item_id])
                         ->andWhere(['>=', 'doc', $from])
                         ->andWhere(['<=', 'doc', $to])
+                        ->andWhere(['in', 'master_id', $arr])
                         ->groupBy('product_id')
                         ->all();
             }
             $from_date = $_POST['from_date'];
             $to_date = $_POST['to_date'];
         } else {
+            $master = OrderMaster::find()->select('id')->where(['status' => 4])->andWhere(['<>', 'status', 5])->andWhere(['<>', 'admin_status', 5])->asArray()->all();
+            $arr = [];
+            foreach ($master as $value) {
+                $arr[] = $value['id'];
+            }
             $from_date = date('Y-m-d');
             $to_date = date('Y-m-d');
             $item_id = '';
             $model = (new \yii\db\Query())
                     ->select(['product_id,SUM(rate) as net_amount,SUM(quantity) as total_quantity'])
                     ->from('order_details')
+                    ->where(['in', 'master_id', $arr])
                     ->groupBy('product_id')
                     ->all();
         }
@@ -185,6 +207,11 @@ class OrderMasterController extends Controller {
         ]);
     }
 
+    /**
+     * This function show order wise report
+     * Data taken from order master table
+     * @return mixed
+     */
     public function actionOrderReport() {
         $searchModel = new OrderMasterSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);

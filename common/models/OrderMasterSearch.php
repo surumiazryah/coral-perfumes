@@ -52,7 +52,7 @@ class OrderMasterSearch extends OrderMaster {
         } else {
             $params["OrderMasterSearch"]["createdTo"] = $params["OrderMasterSearch"]["createdTo"] . ' 60:60:60';
         }
-        $query = OrderMaster::find()->orderBy(['id' => SORT_DESC]);
+        $query = OrderMaster::find()->where(['status' => 4])->andWhere(['<>', 'status', 5])->andWhere(['<>', 'admin_status', 5])->orderBy(['id' => SORT_DESC]);
 
         // add conditions that should always apply here
 

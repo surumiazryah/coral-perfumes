@@ -49,8 +49,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                     ?>
                                     <tr>
                                         <td><?= $sale_total ?></td>
-                                        <td><?= $amount_total ?></td>
-                                        <td><?= $net_amount_total ?></td>
+                                        <td><?= sprintf('%0.2f', $amount_total); ?></td>
+                                        <td><?= sprintf('%0.2f', $net_amount_total); ?></td>
                                     </tr>
                                 </table>
                             </div>
@@ -77,8 +77,26 @@ $this->params['breadcrumbs'][] = $this->title;
                                     }
                                 },
                             ],
-                            'total_amount',
-                            'net_amount',
+                            [
+                                'attribute' => 'total_amount',
+                                'value' => function ($data) {
+                                    if (isset($data->total_amount)) {
+                                        return sprintf('%0.2f', $data->total_amount);
+                                    } else {
+                                        return '';
+                                    }
+                                },
+                            ],
+                            [
+                                'attribute' => 'net_amount',
+                                'value' => function ($data) {
+                                    if (isset($data->net_amount)) {
+                                        return sprintf('%0.2f', $data->net_amount);
+                                    } else {
+                                        return '';
+                                    }
+                                },
+                            ],
                             'order_date',
                         ],
                     ]);

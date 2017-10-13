@@ -76,22 +76,22 @@ class OrderMaster extends \yii\db\ActiveRecord {
     }
 
     public static function getOrderTotal() {
-        $order = OrderMaster::find()->all();
+        $order = OrderMaster::find()->where(['status' => 4])->andWhere(['<>', 'status', 5])->andWhere(['<>', 'admin_status', 5])->all();
         return count($order);
     }
 
     public static function getDeliveredTotal() {
-        $order = OrderMaster::find()->where(['admin_status' => 4])->andWhere(['!=', 'status', 5])->all();
+        $order = OrderMaster::find()->where(['admin_status' => 4])->andWhere(['!=', 'admin_status', 5])->andWhere(['!=', 'status', 5])->andWhere(['status' => 4])->all();
         return count($order);
     }
 
     public static function getCanceledTotal() {
-        $order = OrderMaster::find()->where(['status' => 5])->all();
+        $order = OrderMaster::find()->where(['status' => 5])->andWhere(['admin_status' => 5])->all();
         return count($order);
     }
 
     public static function getPendingOrderTotal() {
-        $order = OrderMaster::find()->where(['admin_status' => 0])->andWhere(['!=', 'admin_status', 5])->andWhere(['!=', 'status', 5])->all();
+        $order = OrderMaster::find()->where(['admin_status' => 0])->andWhere(['!=', 'admin_status', 5])->andWhere(['!=', 'status', 5])->andWhere(['status' => 4])->all();
         return count($order);
     }
 

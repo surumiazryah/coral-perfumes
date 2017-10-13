@@ -93,7 +93,7 @@ use common\models\OrderMaster;
             <div class="panel-heading">
                 Recent Orders
             </div>
-            <div  style="min-height: 210px;">
+            <div  style="min-height: 340px;">
                 <table class="table">
                     <thead>
                         <tr style="text-align: center;">
@@ -121,17 +121,17 @@ use common\models\OrderMaster;
                                     <td>
                                         <?php
                                         $status = '';
-                                        if ($recent->status == 0) {
-                                            $status = 'Not Placed';
-                                        } elseif ($recent->status == 1) {
-                                            $status = 'Checkout Started';
-                                        } elseif ($recent->status == 2) {
-                                            $status = 'Billing Complete';
-                                        } elseif ($recent->status == 3) {
-                                            $status = 'Delivery Detail Complete';
-                                        } elseif ($recent->status == 4) {
-                                            $status = 'Order Confirmed';
-                                        } elseif ($recent->status == 5) {
+                                        if ($recent->admin_status == 0) {
+                                            $status = 'Pending';
+                                        } elseif ($recent->admin_status == 1) {
+                                            $status = 'Order Placed';
+                                        } elseif ($recent->admin_status == 2) {
+                                            $status = 'Order Packed';
+                                        } elseif ($recent->admin_status == 3) {
+                                            $status = 'Order Dispatched';
+                                        } elseif ($recent->admin_status == 4) {
+                                            $status = 'Order Delivered';
+                                        } elseif ($recent->admin_status == 5) {
                                             $status = 'Cancelled';
                                         }
                                         echo $status;

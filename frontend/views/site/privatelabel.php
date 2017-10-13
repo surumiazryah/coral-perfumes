@@ -62,7 +62,7 @@ else
                             <div class="step-1 text-left md-text-center sm-text-center xs-text-center">
                                 <div class="col-lg-2">
                                     <div class="icon">
-                                        <i class="fa " aria-hidden="true"><?= $i; ?></i>
+                                        <img class="img-responsive" src="<?= Yii::$app->homeUrl; ?>uploads/cms/private-label/<?= $how_it_work->id ?>.svg" />
                                     </div>
                                 </div>
                                 <div class="col-lg-10">
@@ -90,7 +90,7 @@ else
                     ?>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 marg-bttm-30">
                         <div class="step-1 text-center">
-                            <div class="icon"><i class="fa fa-unlock-alt" aria-hidden="true"></i></div>
+                            <div class="icon"><i class="<?= $benefit->font_awesome ?>" aria-hidden="true"></i></div>
                             <p class="sub-hdng"><?= $benefit->title ?></p>
                             <p class="details md-text-justify sm-text-justify xs-text-center"><?= $benefit->content ?></p>
                         </div>
