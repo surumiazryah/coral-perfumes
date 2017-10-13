@@ -52,15 +52,15 @@ use yii\bootstrap\ActiveForm;
                                                 <?php endif; ?>
                                                 <div class="form-group col-md-12">
                                                         <label for="pwd">Old Password*</label>
-                                                        <input type="password" name="old-password" class="form-control" required="" placeholder="********" id="change-old-password">
+                                                        <input type="password" name="old-password" class="form-control"  placeholder="********" id="change-old-password">
                                                 </div>
                                                 <div class="form-group col-md-12">
                                                         <label for="pwd">New Password*</label>
-                                                        <input type="password" class="form-control" name="new-password" required="" placeholder="********" id="change-new-password">
+                                                        <input type="password" class="form-control" name="new-password"  placeholder="********" id="change-new-password">
                                                 </div>
                                                 <div class="form-group col-md-12">
                                                         <label for="pwd">Confirm Password*</label>
-                                                        <input type="password" class="form-control" required="" name="confirm-password" placeholder="********" id="change-confirm-password">
+                                                        <input type="password" class="form-control"  name="confirm-password" placeholder="********" id="change-confirm-password">
                                                 </div>
                                                 <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 save">
                                                         <?= Html::submitButton('Save Changes', ['class' => 'green2']) ?>
@@ -86,53 +86,37 @@ use yii\bootstrap\ActiveForm;
 
                 $('#change-old-password').on('blur', function () {
                         var old_pwd = $('#change-old-password').val();
-                        $.ajax({
-                                type: 'POST',
-                                cache: false,
-                                data: {old_pwd: old_pwd},
-                                url: homeUrl + 'myaccounts/user/check-password',
-                                success: function (data) {
-                                        if (data == 0) {
-                                                if (!$(".help-block3")[0]) {
-                                                        $("#change-old-password").after('<div class="help-block3" style="color:#a94442"> Incorrect Password.</div>');
+                        if (old_pwd) {
+                                $.ajax({
+                                        type: 'POST',
+                                        cache: false,
+                                        data: {old_pwd: old_pwd},
+                                        url: homeUrl + 'myaccounts/user/check-password',
+                                        success: function (data) {
+                                                if (data == 0) {
+                                                        if (!$(".help-block3")[0]) {
+                                                                $("#change-old-password").after('<div class="help-block3" style="color:#a94442"> Incorrect Password.</div>');
+                                                        } else {
+                                                                $('.help-block3').empty();
+                                                                $('.help-block3').append('Incorrect Password.');
+                                                        }
                                                 } else {
                                                         $('.help-block3').empty();
-                                                        $('.help-block3').append('Incorrect Password.');
                                                 }
-                                        } else {
-                                                $('.help-block3').empty();
                                         }
-                                }
-                        });
+                                });
+                        }
                 });
 
 
 
                 $('#change-new-password').on('blur', function () {
                         var pass_length = PasswordLength();
-                        if (pass_length == 0) {
-                                if (!$(".help-block1")[0]) {
-                                        $("#change-new-password").after('<div class="help-block1" style="color:#a94442"> Password should contain at least 6 characters.</div>');
-                                } else {
-                                        $('.help-block1').empty();
-                                        $('.help-block1').append('Password should contain at least 6 characters.');
-                                }
-                        } else {
-                                $('.help-block1').empty();
-                        }
+
                 });
                 $('#change-confirm-password').on('blur', function () {
                         var confirm = ConfirmPassword();
-                        if (confirm == 0) {
-                                if (!$(".help-block2")[0]) {
-                                        $("#change-confirm-password").after('<div class="help-block2" style="color:#a94442"> Password mismatch.</div>');
-                                } else {
-                                        $('.help-block2').empty();
-                                        $('.help-block2').append('Password mismatch.');
-                                }
-                        } else {
-                                $('.help-block2').empty();
-                        }
+
                 });
 
 
@@ -140,7 +124,10 @@ use yii\bootstrap\ActiveForm;
                         var pass_length = PasswordLength();
                         var confirm = ConfirmPassword();
                         var old_pwd = $('#change-old-password').val();
-                        if (pass_length == 1 && confirm == 1) {
+                        var validation = CheckValidation();
+
+
+                        if (validation == 1 && pass_length == 1 && confirm == 1) {
                                 $.ajax({
                                         url: homeUrl + 'myaccounts/user/check-password',
                                         'async': false,
@@ -170,10 +157,20 @@ use yii\bootstrap\ActiveForm;
                 function PasswordLength() {
                         var length = $('#change-new-password').val().length;
                         if (length) {
-                                if (length >= 6)
+                                if (length >= 6) {
+                                        $('.help-block1').empty();
                                         return 1;
-                                else
+                                } else {
+
+                                        if (!$(".help-block1")[0]) {
+                                                $("#change-new-password").after('<div class="help-block1" style="color:#a94442"> Password should contain at least 6 characters.</div>');
+                                        } else {
+                                                $('.help-block1').empty();
+                                                $('.help-block1').append('Password should contain at least 6 characters.');
+                                        }
                                         return 0;
+
+                                }
                         }
                 }
 
@@ -181,10 +178,56 @@ use yii\bootstrap\ActiveForm;
                         var password = $('#change-new-password').val();
                         var confirm_password = $('#change-confirm-password').val();
                         if (confirm_password !== password) {
+                                if (!$(".help-block2")[0]) {
+                                        $("#change-confirm-password").after('<div class="help-block2" style="color:#a94442"> Password mismatch.</div>');
+                                } else {
+                                        $('.help-block2').empty();
+                                        $('.help-block2').append('Password mismatch.');
+                                }
                                 return 0;
                         } else {
+                                $('.help-block2').empty();
                                 return 1;
                         }
+                }
+
+
+                function CheckValidation() {
+                        var valid = 1;
+                        var pass_length = $('#change-new-password').val();
+                        var confirm = $('#change-confirm-password').val();
+                        var old_pwd = $('#change-old-password').val();
+                        if (!old_pwd) {
+                                valid = 0;
+                                if (!$(".help-block3")[0]) {
+                                        $("#change-old-password").after('<div class="help-block3" style="color:#a94442"> Old Password cannot be blank</div>');
+                                } else {
+                                        $('.help-block3').empty();
+                                        $('.help-block3').append('Old Password cannot be blank.');
+                                }
+                        }
+
+                        if (!pass_length) {
+                                valid = 0;
+                                if (!$(".help-block1")[0]) {
+                                        $("#change-new-password").after('<div class="help-block1" style="color:#a94442"> New Password cannot be blank.</div>');
+                                } else {
+                                        $('.help-block1').empty();
+                                        $('.help-block1').append('New Password cannot be blank.');
+                                }
+                        }
+
+                        if (!confirm) {
+                                valid = 0;
+                                if (!$(".help-block2")[0]) {
+                                        $("#change-confirm-password").after('<div class="help-block2" style="color:#a94442"> Confirm Password cannot be blank.</div>');
+                                } else {
+                                        $('.help-block2').empty();
+                                        $('.help-block2').append('Confirm Password cannot be blank.');
+                                }
+                        }
+                        return valid;
+
                 }
 
 
