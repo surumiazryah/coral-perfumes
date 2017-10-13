@@ -16,7 +16,7 @@ $order_products = OrderDetails::find()->where(['order_id' => $model->order_id])-
     <div class="orders-box">
         <div class="track">
             <button class="product-id"><?= $model->order_id ?></button>
-            <?php if (empty($model->payment_status)) { ?>
+            <?php if ($model->payment_status != '1') { ?>
                 <?= Html::a('<i class="" aria-hidden="true"></i>Continue', ['/checkout/continue', 'id' => $model->order_id], ['class' => 'track-btn btn-success'])
                 ?>
             <?php } ?>
@@ -24,30 +24,62 @@ $order_products = OrderDetails::find()->where(['order_id' => $model->order_id])-
         </div>
         <?php
         foreach ($order_products as $order_product) {
-
-            $product_detail = Product::find()->where(['id' => $order_product->product_id])->one();
+            if ($order_product->item_type == 1) {
+                $product_detail = \common\models\CreateYourOwn::findOne($order_product->product_id);
+                $bottles = common\models\Bottle::findOne($product_detail->bottle);
+                $product_image = Yii::$app->basePath . '/../uploads/create_your_own/bottle/' . $bottles->id . '/small.' . $bottles->bottle_img;
+                if (file_exists($product_image)) {
+                    $image = Yii::$app->homeUrl . 'uploads/create_your_own/bottle/' . $bottles->id . '/small.' . $bottles->bottle_img;
+                }
+            } else {
+                $product_detail = Product::find()->where(['id' => $order_product->product_id])->one();
+                $product_image = Yii::$app->basePath . '/../uploads/product/' . $product_detail->id . '/profile/' . $product_detail->canonical_name . '.' . $product_detail->profile;
+                if (file_exists($product_image)) {
+                    $image = Yii::$app->homeUrl . 'uploads/product/' . $product_detail->id . '/profile/' . $product_detail->canonical_name . '_thumb.' . $product_detail->profile;
+                } else {
+                    $image = Yii::$app->homeUrl . 'uploads/product/profile_thumb.png';
+                }
+            }
             ?>
             <div class="ordered-pro-dtls">
                 <div class="pro-img-box col-lg-2 col-md-2 col-sm-2 col-xs-2">
-                    <?= Html::a('<img src="' . Yii::$app->homeUrl . 'uploads/product/' . $product_detail->id . '/profile/' . $product_detail->canonical_name . '_thumb.' . $product_detail->profile . '" height="100%" alt="1" />', ['/product/product_detail', 'product' => $product_detail->canonical_name], ['target' => '_blank']) ?>
+                    <img src="<?= $image ?>" height="100%" alt="1" />
                 </div>
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-                    <?= Html::a('<p class="cart-pro-heading">' . $product_detail->product_name . '</p>', ['/product/product_detail', 'product' => $product_detail->canonical_name], ['target' => '_blank']) ?>
-                    <?php $product_type = Fregrance::findOne($product_detail->product_type); ?>
-                    <?= Html::a('<p class="cart-pro-subheading">' . $product_type->name . '</p>', ['/product/product_detail', 'product' => $product_detail->canonical_name], ['target' => '_blank']) ?>
-                    </a>
+                    <?php $name = $order_product->item_type == 1 ? 'Custom Perfume' : $product_detail->product_name; ?>
+                    <?= Html::a('<p class="cart-pro-heading">' . $name . '</p>', $order_product->item_type == 1 ? ['#'] : ['/product/product_detail', 'product' => $product_detail->canonical_name], ['target' => '_blank']) ?>
+                    <?php
+                    $label1 = '';
+                    $label2 = '';
+                    if (isset($product->label_1)) {
+                        $label1 = $product->label_1;
+                    }
+                    if (isset($product->label_2)) {
+                        $label2 = $product->label_2;
+                    }
+                    ?>
+                    <?php
+                    // $product_type = Fregrance::findOne($product_detail->product_type);
+                    $fregrance = $order_product->item_type == 1 ? $label1 . ' , ' . $label2 : Fregrance::findOne($product_detail->product_type)->name;
+                    ?>
+                    <?= Html::a('<p class="cart-pro-subheading">' . $fregrance . '</p>', $order_product->item_type == 1 ? ['#'] : ['/product/product_detail', 'product' => $product_detail->canonical_name], ['target' => '_blank']) ?>
                 </div>
                 <?php
-                if ($product_detail->offer_price == '0' || $product_detail->offer_price == '') {
-                    $price = $product_detail->price;
+                if ($order_product->item_type == 1) {
+                    $price = \common\models\CreateYourOwn::findOne($order_product->product_id)->tot_amount;
                 } else {
-                    $price = $product_detail->offer_price;
+                    if ($product_detail->offer_price == '0' || $product_detail->offer_price == '') {
+                        $price = $product_detail->price;
+                    } else {
+                        $price = $product_detail->offer_price;
+                    }
                 }
                 ?>
-                <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 price">AED  <?= $price; ?></div>
+                <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 price">AED <?= $price; ?></div>
                 <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 price">Quantity : <?= $order_product->quantity; ?></div>
+
                 <?php
-                if ($order_product->item_type != '1' && empty($model->payment_status)) {
+                if ($order_product->item_type != '1' && $model->payment_status != '1') {
                     if ($product_detail->stock_availability == '1') {
                         if ($product_detail->stock < $order_product->quantity) {
                             ?>
@@ -56,7 +88,7 @@ $order_products = OrderDetails::find()->where(['order_id' => $model->order_id])-
                         }
                     } else {
                         ?>
-                            <div class = "col-lg-2 col-md-2 col-sm-2 col-xs-2 price" style="color: red">Out Of Stock</div>
+                        <div class = "col-lg-2 col-md-2 col-sm-2 col-xs-2 price" style="color: red">Out Of Stock</div>
                         <?php
                     }
                 }
@@ -112,30 +144,74 @@ $order_products = OrderDetails::find()->where(['order_id' => $model->order_id])-
 
     </div>
 </div>
-
+<!--/********************************************************************************************************************/-->
 <div class="hidden-lg hidden-md hidden-sm col-xs-12">
     <div class="orders-box col-xs-12">
         <div class="track">
             <button class="product-id"><?= $model->order_id ?></button>
+             <?php if ($model->payment_status != '1') { ?>
+                <?= Html::a('<i class="" aria-hidden="true"></i>Continue', ['/checkout/continue', 'id' => $model->order_id], ['class' => 'track-btn btn-success'])
+                ?>
+            <?php } ?>
             <?= Html::a('<i class="fa fa-ban" aria-hidden="true"></i>Cancel', ['/myaccounts/my-orders/cancel-order', 'id' => $model->order_id], ['class' => 'track-btn hidden-xs']) ?>
             <?= Html::a('<i class="fa fa-ban" aria-hidden="true"></i>', ['/myaccounts/my-orders/cancel-order', 'id' => $model->order_id], ['class' => 'track-btn', 'title' => 'Cancel Your Product']) ?>
         </div>
         <?php
         foreach ($order_products as $order_product) {
-            $product_detail = Product::find()->where(['id' => $order_product->product_id])->one();
+            if ($order_product->item_type == 1) {
+                $product_detail = \common\models\CreateYourOwn::findOne($order_product->product_id);
+                $bottles = common\models\Bottle::findOne($product_detail->bottle);
+                $product_image = Yii::$app->basePath . '/../uploads/create_your_own/bottle/' . $bottles->id . '/small.' . $bottles->bottle_img;
+                if (file_exists($product_image)) {
+                    $image = Yii::$app->homeUrl . 'uploads/create_your_own/bottle/' . $bottles->id . '/small.' . $bottles->bottle_img;
+                }
+            } else {
+                $product_detail = Product::find()->where(['id' => $order_product->product_id])->one();
+                $product_image = Yii::$app->basePath . '/../uploads/product/' . $product_detail->id . '/profile/' . $product_detail->canonical_name . '.' . $product_detail->profile;
+                if (file_exists($product_image)) {
+                    $image = Yii::$app->homeUrl . 'uploads/product/' . $product_detail->id . '/profile/' . $product_detail->canonical_name . '_thumb.' . $product_detail->profile;
+                } else {
+                    $image = Yii::$app->homeUrl . 'uploads/product/profile_thumb.png';
+                }
+            }
             ?>
             <div class="ordered-pro-dtls">
                 <div class="pro-img-box col-xs-3">
-                    <a href="<?= Yii::$app->homeUrl . 'product_detail/' . $product_detail->canonical_name ?>"><img src="<?= Yii::$app->homeUrl . 'uploads/product/' . $product_detail->id . '/profile/' . $product_detail->canonical_name . '_thumb.' . $product_detail->profile ?>"/></a>
+                    <img src="<?= $image ?>" height="100%" alt="1" />
                 </div>
                 <div class="col-xs-9">
-                    <a href="<?= Yii::$app->homeUrl . 'product_detail/' . $product_detail->canonical_name ?>"><p class="cart-pro-heading"><?= $product_detail->product_name ?></p></a>
-                    <?php $product_type = Fregrance::findOne($product_detail->product_type); ?>
-                    <a href="<?= Yii::$app->homeUrl . 'product_detail/' . $product_detail->canonical_name ?>"><p class="cart-pro-subheading"><?= $product_type->name; ?></p>
-                    </a>
+                    <?php $name = $order_product->item_type == 1 ? 'Custom Perfume' : $product_detail->product_name; ?>
+                    <?= Html::a('<p class="cart-pro-heading">' . $name . '</p>', $order_product->item_type == 1 ? ['#'] : ['/product/product_detail', 'product' => $product_detail->canonical_name], ['target' => '_blank']) ?>
+                    <?php
+                    $label1 = '';
+                    $label2 = '';
+                    if (isset($product->label_1)) {
+                        $label1 = $product->label_1;
+                    }
+                    if (isset($product->label_2)) {
+                        $label2 = $product->label_2;
+                    }
+                    ?>
+                    <?php
+                    // $product_type = Fregrance::findOne($product_detail->product_type);
+                    $fregrance = $order_product->item_type == 1 ? $label1 . ' , ' . $label2 : Fregrance::findOne($product_detail->product_type)->name;
+                    ?>
+                    <?= Html::a('<p class="cart-pro-subheading">' . $fregrance . '</p>', $order_product->item_type == 1 ? ['#'] : ['/product/product_detail', 'product' => $product_detail->canonical_name], ['target' => '_blank']) ?>
                     <!--<p class="product-discp">Sed ut perspiciatis unde omnis iste natus error sit voluptatem.</p>-->
                 </div>
-                <div class="col-xs-12 price">AED <?= $product_detail->price; ?></div>
+                <?php
+                if ($order_product->item_type == 1) {
+                    $price = \common\models\CreateYourOwn::findOne($order_product->product_id)->tot_amount;
+                } else {
+                    if ($product_detail->offer_price == '0' || $product_detail->offer_price == '') {
+                        $price = $product_detail->price;
+                    } else {
+                        $price = $product_detail->offer_price;
+                    }
+                }
+                ?>
+                <div class="col-xs-12 price">AED <?= $price?></div>
+                <div class="col-xs-12 price">Quantity : <?= $order_product->quantity; ?></div>
                 <?php if ($order_product->status == 1) { ?>
                     <div class=" col-xs-12 delivered-date">Delivered on <?= date('D, M dS y', strtotime($order_product->delivered_date)) ?>
                         <span>Your item has been delivered</span>
@@ -168,3 +244,4 @@ $order_products = OrderDetails::find()->where(['order_id' => $model->order_id])-
         </div>
     </div>
 </div>
+

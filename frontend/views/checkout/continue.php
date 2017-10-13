@@ -113,27 +113,27 @@ $this->title = 'Continue Cart';
                                             }
                                         }
                                         ?>
-                                        <?php if ($cart->item_type == 1  || ($product->stock != 0 && $product->stock_availability == '1')) {
-                                                ?>
-                                                <span class="input-group-btn data-dwn">
-                                                    <button class="btn btn-default btn-info cart_quantity-minus order_button" id="<?= $cart->id; ?>" data-dir="dwn"><i class="fa fa-minus" aria-hidden="true"></i></button>
-                                                </span>
-                                                <input type='number'  name='cart_quantity' class="form-control text-center ordqnty" id="orderqty_<?= $cart->id; ?>" value="<?= $quantity ?>" min="1" <?= $max ?>>
+                                        <?php if ($cart->item_type == 1 || ($product->stock != 0 && $product->stock_availability == '1')) {
+                                            ?>
+                                            <span class="input-group-btn data-dwn">
+                                                <button class="btn btn-default btn-info cart_quantity-minus order_button" id="<?= $cart->id; ?>" data-dir="dwn"><i class="fa fa-minus" aria-hidden="true"></i></button>
+                                            </span>
+                                            <input type='number'  name='cart_quantity' class="form-control text-center ordqnty" id="orderqty_<?= $cart->id; ?>" value="<?= $quantity ?>" min="1" <?= $max ?>>
 
-                                                <span class="input-group-btn data-up">
-                                                    <button class="btn btn-default btn-info cart_quantity-plus order_button" id="<?= $cart->id; ?>" data-dir="up"><i class="fa fa-plus" aria-hidden="true"></i></button>
-                                                </span>
-                                            <?php } else { ?>
-                                                Out Of Stock
-                                            <?php }
+                                            <span class="input-group-btn data-up">
+                                                <button class="btn btn-default btn-info cart_quantity-plus order_button" id="<?= $cart->id; ?>" data-dir="up"><i class="fa fa-plus" aria-hidden="true"></i></button>
+                                            </span>
+                                        <?php } else { ?>
+                                            Out Of Stock
+                                        <?php }
                                         ?>
                                     </div>
                                 </td>
-    <?php $total = $price * $quantity; ?>
+                                <?php $total = $price * $quantity; ?>
                                 <td class="col-lg-2 col-md-2 col-sm-2 col-xs-2 text-center price  total_<?= $cart->id ?>"><?php echo $total > "0" ? 'AED ' . sprintf('%0.2f', $total) : '-' ?></td>
 
                                 <td class="col-lg-2 col-md-2 col-sm-2 col-xs-2 text-center">
-                            <?= Html::a('<button type="button" class="btn-remove"><i class="fa fa-trash-o" aria-hidden="true"></i></button>', ['checkout/remove-order?id=' . $cart->id], ['class' => 'button']) ?>
+                                    <?= Html::a('<button type="button" class="btn-remove"><i class="fa fa-trash-o" aria-hidden="true"></i></button>', ['checkout/remove-order?id=' . $cart->id], ['class' => 'button']) ?>
                                 </td>
                             </tr>
                             <?php
@@ -147,7 +147,7 @@ $this->title = 'Continue Cart';
                     <div class="col-md-12"><span class="message">Shipping, taxes, and discounts will be calculated at checkout.</span></div>
                     <br/>
                     <div class="col-md-12">
-<?= Html::a('<button class="green2">check out</button>', ['checkout/proceed'], ['class' => 'button']) ?>
+                        <?= Html::a('<button class="green2">check out</button>', ['checkout/proceed'], ['class' => 'button']) ?>
                         <!--<a  href="checkout.php"> <button class="green2">check out</button></a>-->
                     </div>
                 </div>
@@ -177,7 +177,7 @@ $this->title = 'Continue Cart';
                         }
                         ?>
                         <div class="track">
-    <?= Html::a('<button title="Remove From Order" class="remove-order"><i class="fa fa-times" aria-hidden="true"></i></button>', ['checkout/remove-order?id=' . $cart->id], ['class' => 'button']) ?>
+                            <?= Html::a('<button title="Remove From Order" class="remove-order"><i class="fa fa-times" aria-hidden="true"></i></button>', ['checkout/remove-order?id=' . $cart->id], ['class' => 'button']) ?>
 
                             <!--<button class="add-cart green2">add to cart</button>-->
                         </div>
@@ -212,7 +212,7 @@ $this->title = 'Continue Cart';
                                 } else {
                                     $quantity = $product->stock;
                                 }
-                                if ($product->stock > 0) {
+                                if ($product->stock > 0 && $product->stock_availability == '1') {
                                     ?>
                                     <select min="0" max="5" id="orderqty2_<?= $cart->id; ?>" class="ordqnty" name="quantity">
                                         <?php
@@ -220,8 +220,8 @@ $this->title = 'Continue Cart';
                                         for ($i = '1'; $i <= $stocks; $i++) {
                                             ?>
                                             <option  <?php if ($i == $quantity) { ?>selected="selected"<?php } ?>value="<?= $i ?>"><?= $i ?></option>
-        <?php }
-        ?>
+                                        <?php }
+                                        ?>
 
 
                                     </select>
@@ -238,12 +238,12 @@ $this->title = 'Continue Cart';
                                 <p><strong>Item Total</strong></p>
                             </div>
                             <div class="col-xs-7 amount">
-    <?php $total = $price * $quantity; ?>
+                                <?php $total = $price * $quantity; ?>
                                 <p class="text-right total_<?= $cart->id ?>"><?php echo $total > "0" ? 'AED ' . sprintf('%0.2f', $total) : '-' ?></p>
                             </div>
                         </div>
                     </div>
-<?php } ?>
+                <?php } ?>
                 <div class="lit-blue mob-sub-total sub-total">
                     <div class="col-md-12"><h4>Subtotal:<span class="price subtotal">AED <?= $subtotal ?></span></h4></div>
                     <div class="col-md-12"><span class="message">Shipping, taxes, and discounts will be calculated at checkout.</span></div>
@@ -253,7 +253,7 @@ $this->title = 'Continue Cart';
 
             <div class="lit-blue mob-checkout-buttons sub-total hidden-lg hidden-md hidden-sm">
                 <div class="col-md-12">
-<?= Html::a('<button class="green2">check out</button>', ['checkout/proceed'], ['class' => 'button']) ?>
+                    <?= Html::a('<button class="green2">check out</button>', ['checkout/proceed'], ['class' => 'button']) ?>
                     <!--<a  href="checkout.php"> <button class="green2">check out</button></a>-->
                 </div>
             </div>

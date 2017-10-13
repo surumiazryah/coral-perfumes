@@ -48,7 +48,7 @@ class CartController extends \yii\web\Controller {
                 $condition = ['session_id' => $sessonid];
                 $user_id = '';
             }
-            $cart = Cart::find()->where(['product_id' => $id])->andWhere($condition)->one();
+            $cart = Cart::find()->where(['product_id' => $id, 'item_type' => '0'])->andWhere($condition)->one();
             if (!empty($cart)) {
                 $quantity = ($cart->quantity) + $qty;
                 $cart->quantity = $quantity > $stock ? $stock : $quantity;
@@ -250,17 +250,24 @@ class CartController extends \yii\web\Controller {
             $qty = Yii::$app->request->post()['quantity'];
             if (isset($cart_id)) {
                 $cart = Cart::findone($cart_id);
-                $product = Product::findOne($cart->product_id);
                 if ($qty == 0 || $qty == "") {
                     $qty = 1;
                 }
-                $quantity = $qty > $product->stock ? $product->stock : $qty;
-                if ($product->offer_price == '0' || $product->offer_price == '') {
-                    $price = $product->price;
+                if ($cart->item_type == '1') {
+                    $prdct = CreateYourOwn::findOne($cart->product_id);
+                    $qty = $qty > 100 ? 100 : $qty;
+                    $quantity = $qty;
+                    $total = $qty * $prdct->tot_amount;
                 } else {
-                    $price = $product->offer_price;
+                    $product = Product::findOne($cart->product_id);
+                    $quantity = $qty > $product->stock ? $product->stock : $qty;
+                    if ($product->offer_price == '0' || $product->offer_price == '') {
+                        $price = $product->price;
+                    } else {
+                        $price = $product->offer_price;
+                    }
+                    $total = $price * $quantity;
                 }
-                $total = $price * $quantity;
                 echo json_encode(array('msg' => 'success', 'quantity' => $quantity, 'total' => sprintf('%0.2f', $total)));
             }
         }

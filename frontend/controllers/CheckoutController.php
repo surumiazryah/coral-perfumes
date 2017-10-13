@@ -270,6 +270,7 @@ class CheckoutController extends \yii\web\Controller {
                 $subtotal += ($cart_item->rate * $cart_item->quantity);
             } else {
                 $product = Product::findOne($cart_item->product_id);
+                
                 if ($product->offer_price == '0' || $product->offer_price == '') {
                     $price = $product->price;
                 } else {
@@ -288,15 +289,17 @@ class CheckoutController extends \yii\web\Controller {
                 $subtotal += ($cart_item->amount * $cart_item->quantity);
             } else {
                 $product = Product::findOne($cart_item->product_id);
-                if ($product->offer_price == '0' || $product->offer_price == '') {
-                    $price = $product->price;
-                } else {
-                    $price = $product->offer_price;
-                }
-                if ($product->stock >= $cart_item->quantity) {
-                    $quantity = $cart_item->quantity;
-                } else {
-                    $quantity = $product->stock;
+                if ($product->stock > 0 && $product->stock_availability == '1') {
+                    if ($product->offer_price == '0' || $product->offer_price == '') {
+                        $price = $product->price;
+                    } else {
+                        $price = $product->offer_price;
+                    }
+                    if ($product->stock >= $cart_item->quantity) {
+                        $quantity = $cart_item->quantity;
+                    } else {
+                        $quantity = $product->stock;
+                    }
                 }
                 $subtotal += ($price * $quantity);
             }

@@ -106,7 +106,7 @@ $this->title = 'Shopping Cart';
                                         </span>
                                         <?php
                                         if ($cart->item_type == 1) {
-                                            $max = '';
+                                            $max = 'Max=100';
                                         } else {
                                             $max = 'Max="' . $product->stock . '"';
                                         }
