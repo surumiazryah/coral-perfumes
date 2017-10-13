@@ -311,6 +311,8 @@ $('.cart_quantity-plus').on('click', function () {
         var quantity = add;
         $("#orderqty2_" + id).val(parseInt(quantity));
         updateorder(id, quantity);
+    }else{
+      hideLoader();  
     }
 });
 $('.cart_quantity-minus').on('click', function () {
@@ -323,6 +325,8 @@ $('.cart_quantity-minus').on('click', function () {
         var quantity = add;
         $("#orderqty2_" + id).val(parseInt(quantity));
         updateorder(id, quantity);
+    }else{
+        hideLoader();
     }
 });
  $('.ordqnty').on('change keyup', function () {
@@ -403,6 +407,8 @@ function updateorder(id, quantity) {
                 $('#orderqty2_' + id).val($data.quantity);
                 $('.subtotal').html('AED ' + $data.subtotal);
                 hideLoader();
+            }else{
+                 hideLoader();
             }
         }
     });

@@ -46,6 +46,21 @@ $order_products = OrderDetails::find()->where(['order_id' => $model->order_id])-
                 ?>
                 <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 price">AED  <?= $price; ?></div>
                 <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 price">Quantity : <?= $order_product->quantity; ?></div>
+                <?php
+                if ($order_product->item_type != '1' && empty($model->payment_status)) {
+                    if ($product_detail->stock_availability == '1') {
+                        if ($product_detail->stock < $order_product->quantity) {
+                            ?>
+                            <div class = "col-lg-2 col-md-2 col-sm-2 col-xs-2 price" style="color: red"><?= $product_detail->stock != 0 ? $product_detail->stock . ' Available' : 'Out Of Stock' ?></div>
+                            <?php
+                        }
+                    } else {
+                        ?>
+                            <div class = "col-lg-2 col-md-2 col-sm-2 col-xs-2 price" style="color: red">Out Of Stock</div>
+                        <?php
+                    }
+                }
+                ?>
 
                 <?php if ($order_product->status == 1) { ?>
                     <div class=" col-lg-4 col-md-4 col-sm-4 col-xs-4 delivered-date">Delivered on <?= date('D, M dS y', strtotime($order_product->delivered_date)) ?>

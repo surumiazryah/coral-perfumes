@@ -455,6 +455,7 @@ class CheckoutController extends \yii\web\Controller {
                     if (!empty($cart_items)) {
                         $subtotal = $this->total($cart_items);
                     }
+                    $this->updatemaster($cart->order_id, $subtotal);
                     echo json_encode(array('msg' => 'success', 'quantity' => $cart->quantity, 'total' => sprintf('%0.2f', $total), 'subtotal' => sprintf('%0.2f', $subtotal)));
                 } else {
                     echo json_encode(array('msg' => 'error', 'content' => 'Cannot be Changed'));
@@ -463,6 +464,73 @@ class CheckoutController extends \yii\web\Controller {
                 echo json_encode(array('msg' => 'error', 'content' => 'Id cannot be set'));
             }
         }
+    }
+
+    function updatemaster($order_id, $subtotal) {
+        $ordermaster = OrderMaster::find()->where(['order_id' => $order_id])->one();
+        $limit = Settings::findOne(1)->value;
+        $net_amnt = $subtotal;
+        if ($limit > $subtotal) {
+            $extra = Settings::findOne(2)->value;
+            $net_amnt = $extra + $subtotal;
+        }
+        $ordermaster->total_amount = $subtotal;
+        $ordermaster->net_amount = $net_amnt;
+        $ordermaster->save();
+    }
+
+    public function actionProceed() {
+        $orderdetails = OrderDetails::find()->where(['order_id' => Yii::$app->session['orderid']])->all();
+        foreach ($orderdetails as $details) {
+            $this->updatedetails($details);
+        }
+        $subtotal = $this->total_continue($orderdetails);
+        $this->updatemaster(Yii::$app->session['orderid'], $subtotal);
+        $this->continuepromotion();
+        $this->redirect(array('checkout/promotion'));
+    }
+
+    function continuepromotion() {
+        $order = OrderMaster::find()->where(['order_id' => Yii::$app->session['orderid']])->one();
+        $order_promotion = OrderPromotions::find()->where(['order_master_id' => $order->id])->all();
+        foreach ($order_promotion as $ordrpromo) {
+            $promotion = \common\models\Promotions::findOne($ordrpromo->promotion_id);
+            $promotion_users = explode(',', $promotion->code_used);
+
+            if (($key = array_search(Yii::$app->user->identity->id, $promotion_users)) !== false) {
+                unset($promotion_users[$key]);
+            }
+            $promotion_users = implode(',', $promotion_users);
+            $promotion->code_used = $promotion_users;
+            $promotion->save();
+            $ordrpromo->delete();
+        }
+    }
+
+    function updatedetails($details) {
+        $product = Product::findOne($details->product_id);
+        if ($details->item_type != 1) {
+            if ($product->stock == '0' || $product->stock_availability == '0') {
+                $details->delete();
+            } elseif ($product->stock > '0' && $product->stock < $details->quantity) {
+                $quantity = $product->stock;
+            } elseif ($product->stock >= $details->quantity) {
+                $quantity = $details->quantity;
+            }
+            if ($product->offer_price == '0' || $product->offer_price == '') {
+                $price = $product->price;
+            } else {
+                $price = $product->offer_price;
+            }
+        }
+        if ($details->item_type == 1) {
+            $details->rate = $details->amount * $details->quantity;
+        } else {
+            $details->quantity = $quantity;
+            $details->amount = $price;
+            $details->rate = ($price * $quantity);
+        }
+        $details->save();
     }
 
 }
