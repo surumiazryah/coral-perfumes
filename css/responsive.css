@@ -292,6 +292,10 @@
         }
 }
 @media (max-width: 992px) and (min-width:768px){
+	.marg-bttm-30{
+		min-height: 200px;
+		max-height: 200px
+	}
         .slide-text{
                 display: none;
         }
