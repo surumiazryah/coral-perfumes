@@ -110,7 +110,7 @@ $this->title = 'Checkout-Confirm';
                                                         <h5 class="product-heading text-right">Total:</h5>
                                                 </div>
                                                 <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 total-cost">
-                                                        <?php $grand_total = $subtotal + $ship_charge - $promotions ?>
+                                                        <?php $grand_total = ($subtotal + $ship_charge) - $promotions ?>
                                                         <p class="text-right price">AED <?= sprintf('%0.2f', $grand_total) ?></p>
                                                 </div>
                                         </div>

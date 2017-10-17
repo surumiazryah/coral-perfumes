@@ -11,6 +11,7 @@ use common\models\Settings;
 use common\models\Cart;
 use common\models\OrderPromotions;
 use yii\helpers\ArrayHelper;
+use common\models\CreateYourOwn;
 
 class CheckoutController extends \yii\web\Controller {
 
@@ -267,10 +268,10 @@ class CheckoutController extends \yii\web\Controller {
         $subtotal = '0';
         foreach ($cart as $cart_item) {
             if ($cart_item->item_type == 1) {
-                $subtotal += ($cart_item->rate * $cart_item->quantity);
+                $subtotal += ($cart_item->rate);
             } else {
                 $product = Product::findOne($cart_item->product_id);
-                
+
                 if ($product->offer_price == '0' || $product->offer_price == '') {
                     $price = $product->price;
                 } else {
@@ -439,24 +440,31 @@ class CheckoutController extends \yii\web\Controller {
             $qty = Yii::$app->request->post()['quantity'];
             if (isset($cart_id)) {
                 $cart = OrderDetails::findone($cart_id);
-                $product = Product::findOne($cart->product_id);
-                if ($qty == 0 || $qty == "") {
-                    $qty = 1;
-                }
-                $cart->quantity = $qty > $product->stock ? $product->stock : $qty;
-                ///
-                if ($product->offer_price == '0' || $product->offer_price == '') {
-                    $price = $product->price;
+                if ($cart->item_type == '1') {
+                    $prdct = CreateYourOwn::findOne($cart->product_id);
+                    $cart->quantity = $qty > 100 ? 100 : $qty;
+                    $price = $prdct->tot_amount;
+                    $total = $cart->quantity * $prdct->tot_amount;
                 } else {
-                    $price = $product->offer_price;
+                    $product = Product::findOne($cart->product_id);
+                    if ($qty == 0 || $qty == "") {
+                        $qty = 1;
+                    }
+                    $cart->quantity = $qty > $product->stock ? $product->stock : $qty;
+                    ///
+                    if ($product->offer_price == '0' || $product->offer_price == '') {
+                        $price = $product->price;
+                    } else {
+                        $price = $product->offer_price;
+                    }
+                    $total = $price * $cart->quantity;
                 }
-                $total = $price * $cart->quantity;
                 $cart->amount = $price;
                 $cart->rate = $total;
                 if ($cart->save()) {
                     $cart_items = OrderDetails::find()->where(['order_id' => $cart->order_id])->all();
                     if (!empty($cart_items)) {
-                        $subtotal = $this->total($cart_items);
+                        $subtotal = $this->total_continue($cart_items);
                     }
                     $this->updatemaster($cart->order_id, $subtotal);
                     echo json_encode(array('msg' => 'success', 'quantity' => $cart->quantity, 'total' => sprintf('%0.2f', $total), 'subtotal' => sprintf('%0.2f', $subtotal)));

@@ -213,37 +213,6 @@ class CartController extends \yii\web\Controller {
         }
     }
 
-    public function actionUpdatecart() {
-        if (yii::$app->request->isAjax) {
-            $cart_id = Yii::$app->request->post()['cartid'];
-            $qty = Yii::$app->request->post()['quantity'];
-            if (isset($cart_id)) {
-                $cart = Cart::findone($cart_id);
-                $stock = Product::findOne($cart->product_id)->stock;
-                if ($qty == 0 || $qty == "") {
-                    $qty = 1;
-                }
-                $cart->quantity = $qty > $stock ? $stock : $qty;
-                if ($cart->save()) {
-                    if (isset(Yii::$app->user->identity->id)) {
-                        $condition = ['user_id' => Yii::$app->user->identity->id];
-                    } else {
-                        $condition = ['session_id' => Yii::$app->session['temp_user']];
-                    }
-                    $cart_items = Cart::find()->where($condition)->all();
-                    if (!empty($cart_items)) {
-                        $subtotal = $this->total($cart_items);
-                    }
-                    echo json_encode(array('msg' => 'success', 'subtotal' => sprintf('%0.2f', $subtotal)));
-                } else {
-                    echo json_encode(array('msg' => 'error', 'content' => 'Cannot be Changed'));
-                }
-            } else {
-                echo json_encode(array('msg' => 'error', 'content' => 'Id cannot be set'));
-            }
-        }
-    }
-
     public function actionFindstock() {
         if (yii::$app->request->isAjax) {
             $cart_id = Yii::$app->request->post()['cartid'];
@@ -269,6 +238,42 @@ class CartController extends \yii\web\Controller {
                     $total = $price * $quantity;
                 }
                 echo json_encode(array('msg' => 'success', 'quantity' => $quantity, 'total' => sprintf('%0.2f', $total)));
+            }
+        }
+    }
+
+    public function actionUpdatecart() {
+        if (yii::$app->request->isAjax) {
+            $cart_id = Yii::$app->request->post()['cartid'];
+            $qty = Yii::$app->request->post()['quantity'];
+            if (isset($cart_id)) {
+                $cart = Cart::findone($cart_id);
+                if ($cart->item_type == '1') {
+                    $prdct = CreateYourOwn::findOne($cart->product_id);
+                    $cart->quantity = $qty > 100 ? 100 : $qty;
+                } else {
+                    $stock = Product::findOne($cart->product_id)->stock;
+                    if ($qty == 0 || $qty == "") {
+                        $qty = 1;
+                    }
+                    $cart->quantity = $qty > $stock ? $stock : $qty;
+                }
+                if ($cart->save()) {
+                    if (isset(Yii::$app->user->identity->id)) {
+                        $condition = ['user_id' => Yii::$app->user->identity->id];
+                    } else {
+                        $condition = ['session_id' => Yii::$app->session['temp_user']];
+                    }
+                    $cart_items = Cart::find()->where($condition)->all();
+                    if (!empty($cart_items)) {
+                        $subtotal = $this->total($cart_items);
+                    }
+                    echo json_encode(array('msg' => 'success', 'subtotal' => sprintf('%0.2f', $subtotal)));
+                } else {
+                    echo json_encode(array('msg' => 'error', 'content' => 'Cannot be Changed'));
+                }
+            } else {
+                echo json_encode(array('msg' => 'error', 'content' => 'Id cannot be set'));
             }
         }
     }

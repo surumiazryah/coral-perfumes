@@ -103,8 +103,7 @@ $this->title = 'Continue Cart';
                                     <div class="input-group number-spinner">
                                         <?php
                                         if ($cart->item_type == 1) {
-                                            $max = 'Max="100"';
-                                            $quantity = $cart->quantity;
+                                            $max = '';
                                         } else {
                                             $max = 'Max="' . $product->stock . '"';
                                             if ($product->stock > '0' && $product->stock < $cart->quantity) {
@@ -153,6 +152,7 @@ $this->title = 'Continue Cart';
                     </div>
                 </div>
             </div>
+
             <div class=" hidden-lg hidden-md hidden-sm col-xs-12 mob-car-list">
                 <?php
                 foreach ($items as $cart) {
@@ -207,16 +207,12 @@ $this->title = 'Continue Cart';
                             </div>
                             <div class="col-xs-7 text-center">
                                 <?php
-                                if ($cart->item_type == 1) {
+                                if ($product->stock >= $cart->quantity) {
                                     $quantity = $cart->quantity;
                                 } else {
-                                    if ($product->stock >= $cart->quantity) {
-                                        $quantity = $cart->quantity;
-                                    } else {
-                                        $quantity = $product->stock;
-                                    }
+                                    $quantity = $product->stock;
                                 }
-                                if ($cart->item_type == 1 || ($product->stock != 0 && $product->stock_availability == '1')) {
+                                if ($product->stock > 0 && $product->stock_availability == '1') {
                                     ?>
                                     <select min="0" max="5" id="orderqty2_<?= $cart->id; ?>" class="ordqnty" name="quantity">
                                         <?php
@@ -254,8 +250,6 @@ $this->title = 'Continue Cart';
                     <br/>
                 </div>
             </div>
-
-
 
             <div class="lit-blue mob-checkout-buttons sub-total hidden-lg hidden-md hidden-sm">
                 <div class="col-md-12">
