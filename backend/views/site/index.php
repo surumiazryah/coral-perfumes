@@ -179,7 +179,15 @@ use common\models\OrderMaster;
                             foreach ($products as $value) {
                                 ?>
                                 <tr>
-                                    <td><?= $value->canonical_name ?></td>
+                                    <td>
+                                        <?php if (isset($value->canonical_name)) { ?>
+                                            <?= Html::a($value->canonical_name, ['/product/product/update', 'id' => $value->id], ['class' => '', 'target' => '_blank']) ?>
+                                            <?php
+                                        } else {
+                                            echo '';
+                                        }
+                                        ?>
+                                    </td>
                                     <td>
                                         <?php
                                         if ($value->stock == 0) {
