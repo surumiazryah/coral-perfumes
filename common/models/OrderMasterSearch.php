@@ -2,6 +2,7 @@
 
 namespace common\models;
 
+
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
@@ -20,7 +21,7 @@ class OrderMasterSearch extends OrderMaster {
      */
     public function rules() {
         return [
-            [['id', 'user_id', 'ship_address_id', 'bill_address_id', 'currency_id', 'payment_mode', 'admin_comment', 'payment_status', 'admin_status', 'shipping_method', 'status'], 'integer'],
+            [['id', 'user_id', 'ship_address_id', 'bill_address_id', 'currency_id', 'payment_mode', 'admin_comment', 'payment_status', 'admin_status', 'shipping_status', 'status'], 'integer'],
             [['order_id', 'order_date', 'user_comment', 'doc'], 'safe'],
             [['total_amount'], 'number'],
         ];
@@ -84,7 +85,7 @@ class OrderMasterSearch extends OrderMaster {
             'payment_status' => $this->payment_status,
             'admin_status' => $this->admin_status,
             'doc' => $this->doc,
-            'shipping_method' => $this->shipping_method,
+            'shipping_status' => $this->shipping_status,
             'status' => $this->status,
         ]);
 
@@ -140,7 +141,7 @@ class OrderMasterSearch extends OrderMaster {
             'payment_status' => $this->payment_status,
             'admin_status' => $this->admin_status,
             'doc' => $this->doc,
-            'shipping_method' => $this->shipping_method,
+            'shipping_status' => $this->shipping_status,
             'status' => $this->status,
         ]);
 

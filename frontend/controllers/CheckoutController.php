@@ -301,8 +301,8 @@ class CheckoutController extends \yii\web\Controller {
                     } else {
                         $quantity = $product->stock;
                     }
+                    $subtotal += ($price * $quantity);
                 }
-                $subtotal += ($price * $quantity);
             }
         }
         return $subtotal;
@@ -523,6 +523,7 @@ class CheckoutController extends \yii\web\Controller {
         if ($details->item_type != 1) {
             if ($product->stock == '0' || $product->stock_availability == '0') {
                 $details->delete();
+                return TRUE;
             } elseif ($product->stock > '0' && $product->stock < $details->quantity) {
                 $quantity = $product->stock;
             } elseif ($product->stock >= $details->quantity) {
@@ -543,6 +544,5 @@ class CheckoutController extends \yii\web\Controller {
         }
         $details->save();
     }
-    
 
 }

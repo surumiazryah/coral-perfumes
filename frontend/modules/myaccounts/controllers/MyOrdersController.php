@@ -36,7 +36,7 @@ class MyOrdersController extends Controller {
         $searchModel = new OrderMasterSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $dataProvider->query->andWhere(['user_id' => Yii::$app->user->identity->id]);
-        $dataProvider->query->andWhere(['!=', 'payment_status', 1]);
+        $dataProvider->query->andWhere(['shipping_status' => 0]);
         $dataProvider->pagination->pageSize = 10;
         return $this->render('index', [
                     'searchModel' => $searchModel,
