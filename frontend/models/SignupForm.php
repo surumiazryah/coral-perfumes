@@ -38,7 +38,7 @@ class SignupForm extends Model {
             ['email', 'unique', 'targetClass' => '\common\models\User', 'message' => 'This email address has already been taken.'],
             ['password', 'required'],
             ['password', 'string', 'min' => 6],
-            [['country', 'gender'], 'integer'],
+            [['country', 'gender','mobile_no'], 'integer'],
             [['day', 'month', 'year', 'password_repeat', 'notification', 'country_code'], 'safe'],
             [['first_name', 'last_name'], 'string', 'max' => 50],
             [['first_name'], 'required'],

@@ -543,5 +543,6 @@ class CheckoutController extends \yii\web\Controller {
         }
         $details->save();
     }
+    
 
 }
