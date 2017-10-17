@@ -218,9 +218,11 @@ class CheckoutController extends \yii\web\Controller {
     function stock_change() {
         $order_details = OrderDetails::find()->where(['order_id' => Yii::$app->session['orderid']])->all();
         foreach ($order_details as $detail) {
-            $product = Product::findOne($detail->product_id);
-            $product->stock = ($product->stock - $detail->quantity);
-            $product->save();
+            if ($detail->item_type == '0') {
+                $product = Product::findOne($detail->product_id);
+                $product->stock = ($product->stock - $detail->quantity);
+                $product->save();
+            }
         }
     }
 
