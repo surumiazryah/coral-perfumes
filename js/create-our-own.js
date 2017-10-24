@@ -265,8 +265,14 @@ function validateLabel() {
             $('#bottle2_image').attr('src', res.result['bottle-src']);
             $('#label_iamge_tab7').css("background-image", "url(" + res.result['bottle-src'] + ")");
             $('#label_iamge_tab7').css({"width": res.result['img_width'] + 'px', 'height': res.result['img_height'] + 'px'});
-            $('#bottle_custom_image_tab7').attr('src', res.result['bottle_backgrnd_src']);
-            $("#bottle_custom_image_tab7").css({"width": positions['image']['width'], "height": positions['image']['height']});
+            if (!res.result['bottle_backgrnd_src']) {
+                alert('if');
+                $('#bottle_custom_image_tab7').css({"width": positions['image']['width']});
+            } else {
+                alert('else');
+                $('#bottle_custom_image_tab7').attr('src', res.result['bottle_backgrnd_src']);
+                $("#bottle_custom_image_tab7").css({"width": positions['image']['width'], "height": positions['image']['height']});
+            }
             $("#image_tab7").css({"width": positions['image']['width'], "height": positions['image']['height'], "top": top_value + 'px', "left": left_value + 'px', 'position': 'absolute'});
             $('#label_1_tab7').text(res.result['first-line']);
             $('#label_2_tab7').text(res.result['second-line']);

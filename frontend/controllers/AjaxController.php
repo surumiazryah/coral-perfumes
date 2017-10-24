@@ -228,14 +228,16 @@ class AjaxController extends \yii\web\Controller {
                     $options .= '<div class="col-lg-2 col-md-2 col-sm-2 col-xs-2"><img src="' . Yii::$app->homeUrl . 'uploads/create_your_own/notes/' . $datas->id . '/small.' . $datas->sub_img . '"><p style="font-size:12px;" title="' . $datas->notes . '">' . $str . '</p></div>';
                 }
             }
-            $create_your_own = CreateYourOwn::find()->where(['id' => Yii::$app->session['create-your-own']['id']])->one();
-
             $bottle_data = \common\models\Bottle::find()->where(['id' => Yii::$app->session['create-your-own']['bottle']])->one();
             $data_positions = $bottle_data->data_positions;
             $image_width = $bottle_data->image_width;
             $image_height = $bottle_data->image_height;
             $bottle_src = Yii::$app->homeUrl . 'uploads/create_your_own/bottle/' . $bottle_data->id . '/large.' . $bottle_data->bottle_img;
-            $bottle_backgrnd_src = Yii::$app->homeUrl . 'uploads/create_your_own/bottle_image/' . $create_your_own->id . '.' . $create_your_own->image;
+            if (isset(Yii::$app->session['temp_img_session']) && isset(Yii::$app->session['create-your-own']['img-extension'])) {
+                $bottle_backgrnd_src = Yii::$app->homeUrl . 'uploads/create_your_own/bottle_image/' . Yii::$app->session['temp_img_session'] . '.' . Yii::$app->session['create-your-own']['img-extension'];
+            } else {
+                $bottle_backgrnd_src = '';
+            }
             $arr_variable1 = array('bottle_backgrnd_src' => $bottle_backgrnd_src, 'data_pos' => $data_positions, 'img_width' => $image_width, 'img_height' => $image_height, 'heading' => $heading, 'first-line' => Yii::$app->session['create-your-own']['line-1'], 'second-line' => Yii::$app->session['create-your-own']['line-2'], 'tot-count' => sprintf('%0.2f', Yii::$app->session['create-your-own']['total-amount']) . ' $', 'note-imgs' => $options, 'bottle-src' => $bottle_src);
             $data['result'] = $arr_variable1;
             echo json_encode($data);
@@ -250,14 +252,46 @@ class AjaxController extends \yii\web\Controller {
     public function actionCheckOut() {
 
         if (Yii::$app->request->isAjax) {
-
+            $data = Yii::$app->session['create-your-own'];
+            $user_id = '';
+            $sessonid = '';
             $flag = 0;
-            $model = CreateYourOwn::find()->where(['id' => yii::$app->session['create-your-own']['id']])->one();
+            $model = new CreateYourOwn();
             if (isset(Yii::$app->user->identity->id)) {
+                $user_id = Yii::$app->user->identity->id;
                 $flag = 1;
+            } else {
+                if (!isset(Yii::$app->session['temp_create_yourown']) || Yii::$app->session['temp_create_yourown'] == '') {
+                    $milliseconds = round(microtime(true) * 1000);
+                    Yii::$app->session['temp_create_yourown'] = $milliseconds;
+                }
+                $sessonid = Yii::$app->session['temp_create_yourown'];
             }
-            yii::$app->session['create_own'] = $model->id;
-            yii::$app->session['after_login'] = 'cart/mycart';
+            $model->user_id = $user_id;
+            $model->session_id = $sessonid;
+            $model->gender = $data['gender'];
+            $model->character_id = $data['character'];
+            $model->scent = $data['scent'];
+            $model->note = $data['note-data'];
+            $model->bottle = $data['bottle'];
+            $model->label_1 = $data['line-1'];
+            $model->label_2 = $data['line-2'];
+            $model->tot_amount = $data['total-amount'];
+            if (isset(Yii::$app->session['temp_img_session']) && isset(Yii::$app->session['create-your-own']['img-extension'])) {
+                $model->image = Yii::$app->session['create-your-own']['img-extension'];
+            }
+            if ($model->save()) {
+                if (isset(Yii::$app->session['temp_img_session']) && isset(Yii::$app->session['create-your-own']['img-extension'])) {
+                    $path = Yii::$app->basePath . '/../' . "uploads/create_your_own/bottle_image/";
+                    $file = $path . Yii::$app->session['temp_img_session'] . '.' . Yii::$app->session['create-your-own']['img-extension'];
+                    $newName = $model->id . '.' . Yii::$app->session['create-your-own']['img-extension'];
+                    rename($file, $path . $newName);
+                    unset(Yii::$app->session['temp_img_session']);
+                    unset(Yii::$app->session['create-your-own']);
+                }
+                yii::$app->session['create_own'] = $model->id;
+                yii::$app->session['after_login'] = 'cart/mycart';
+            }
             echo $flag;
         }
     }
@@ -373,46 +407,18 @@ class AjaxController extends \yii\web\Controller {
 
     public function actionBottleImageSave() {
         if (Yii::$app->request->isAjax) {
-            $data = Yii::$app->session['create-your-own'];
-            $user_id = '';
-            $sessonid = '';
-            $flag = 0;
-            $model = new CreateYourOwn();
-            if (isset(Yii::$app->user->identity->id)) {
-                $user_id = Yii::$app->user->identity->id;
-                $flag = 1;
-            } else {
-                if (!isset(Yii::$app->session['temp_create_yourown']) || Yii::$app->session['temp_create_yourown'] == '') {
-                    $milliseconds = round(microtime(true) * 1000);
-                    Yii::$app->session['temp_create_yourown'] = $milliseconds;
-                }
-                $sessonid = Yii::$app->session['temp_create_yourown'];
+            $milliseconds = round(microtime(true) * 1000);
+            if (!isset(Yii::$app->session['temp_img_session'])) {
+                Yii::$app->session['temp_img_session'] = $milliseconds;
             }
-            $model->user_id = $user_id;
-            $model->session_id = $sessonid;
-            $model->gender = $data['gender'];
-            $model->character_id = $data['character'];
-            $model->scent = $data['scent'];
-            $model->note = $data['note-data'];
-            $model->bottle = $data['bottle'];
-            $model->label_1 = $data['line-1'];
-            $model->label_2 = $data['line-2'];
-            $model->tot_amount = $data['total-amount'];
-            if ($model->save()) {
-                yii::$app->session['create_own'] = $model->id;
-                yii::$app->session['after_login'] = 'cart/mycart';
-                $uploaddir = Yii::$app->basePath . '/../' . "uploads/create_your_own/bottle_image/";
-                $temp = explode(".", $_FILES["fileToUpload"]["name"]);
-                basename($_FILES['fileToUpload']['name']);
-                if (move_uploaded_file($_FILES['fileToUpload']['tmp_name'], $uploaddir . $model->id . '.' . end($temp))) {
-                    $model->image = end($temp);
-                    $model->update();
-                    echo Yii::$app->homeUrl . "uploads/create_your_own/bottle_image/" . $model->id . '.' . $model->image;
-                    $sess = Yii::$app->session['create-your-own'];
-                    Yii::$app->session['create-your-own'] = array_merge($sess, ['id' => $model->id]);
-                }
+            $uploaddir = Yii::$app->basePath . '/../' . "uploads/create_your_own/bottle_image/";
+            $temp = explode(".", $_FILES["fileToUpload"]["name"]);
+            basename($_FILES['fileToUpload']['name']);
+            if (move_uploaded_file($_FILES['fileToUpload']['tmp_name'], $uploaddir . Yii::$app->session['temp_img_session'] . '.' . end($temp))) {
+                $sess = Yii::$app->session['create-your-own'];
+                Yii::$app->session['create-your-own'] = array_merge($sess, ['img-extension' => end($temp)]);
+                echo Yii::$app->homeUrl . "uploads/create_your_own/bottle_image/" . Yii::$app->session['temp_img_session'] . '.' . Yii::$app->session['create-your-own']['img-extension'];
             }
-            //echo $flag;
         }
     }
 

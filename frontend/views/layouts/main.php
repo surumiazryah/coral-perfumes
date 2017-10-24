@@ -40,7 +40,7 @@ and open the template in the editor.
 
 
         <?php $this->beginBody() ?>
-        <?php $action = Yii::$app->controller->id . '/' . Yii::$app->controller->action->id; // controller action id ?>
+        <?php $action = Yii::$app->controller->id . '/' . Yii::$app->controller->action->id; // controller action id  ?>
         <div id="sticky-header">
             <div id="top-header">
                 <div class="container">
@@ -66,7 +66,7 @@ and open the template in the editor.
                                     </li>
 <!--                                    <li class="dropdown hidden-lg hidden-md hidden-sm"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="truck"></i></a>
                                         <ul class="dropdown-menu">
-                                            <li><?php // $shipping->content;                                                      ?></li>
+                                            <li><?php // $shipping->content;                                                                     ?></li>
                                         </ul>
                                     </li>-->
                                     <li>
@@ -78,7 +78,7 @@ and open the template in the editor.
                                     </li>
                                     <li class="top-social"><a href="<?= $linkedin->content; ?>" target="_blank"><i class="fa fa-linkedin" aria-hidden="true"></i></a></li>
                                     <li class="top-social"><a href="<?= $google->content; ?>" target="_blank"><i class="fa fa-google-plus" aria-hidden="true"></i></a></li>
-                                    <!--<li class="top-social"><a href="<?php // $twitter->content;                                                  ?>" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>-->
+                                    <!--<li class="top-social"><a href="<?php // $twitter->content;                                                                 ?>" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>-->
                                 </ul>
                             </div>
                         </div>
@@ -332,7 +332,7 @@ and open the template in the editor.
                             <div class="col-md-12 my-account-link">
                                 <ul>
                                     <li><?= Html::a('My Account', ['/myaccounts/user/index'], ['class' => '']) ?></li>
-                                    <!--<li><?php // Html::a('Private Label', ['/site/private-label'], ['class' => ''])                                                         ?></li>-->
+                                    <!--<li><?php // Html::a('Private Label', ['/site/private-label'], ['class' => ''])                                                                        ?></li>-->
                                     <!--<li><a href="#">Exclusive Brands</a></li>-->
                                     <li><?= Html::a('Showrooms', ['/site/showrooms'], ['class' => '']) ?></li>
                                     <!--<li><a href="#">Brands</a></li>-->
@@ -344,7 +344,7 @@ and open the template in the editor.
                         <div class="col-md-12 col-sm-12 hidden-xs foot-social">
                             <ul>
                                 <li><a href="<?= $facebook->content; ?>" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
-                                <!--<li><a href="<?php // echo $twitter->content;                                                      ?>"target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>-->
+                                <!--<li><a href="<?php // echo $twitter->content;                                                                     ?>"target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>-->
                                 <li><a href="<?= $google->content; ?>"target="_blank"><i class="fa fa-google-plus" aria-hidden="true"></i></a></li>
                                 <li><a href="<?= $linkedin->content; ?>"target="_blank"><i class="fa fa-linkedin" aria-hidden="true"></i></a></li>
                             </ul>
@@ -353,7 +353,7 @@ and open the template in the editor.
                     <div style="text-align: center;" class="hidden-lg hidden-md hidden-sm col-xs-12 foot-social">
                         <ul style="margin: 0 auto; display: inline-block;">
                             <li><a href="<?= $facebook->content; ?>"target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
-                            <!--<li><a href="<?php // echo $twitter->content;                                                      ?>"target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>-->
+                            <!--<li><a href="<?php // echo $twitter->content;                                                                     ?>"target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>-->
                             <li><a href="<?= $google->content; ?>"target="_blank"><i class="fa fa-google-plus" aria-hidden="true"></i></a></li>
                             <li><a href="<?= $linkedin->content; ?>"target="_blank"><i class="fa fa-linkedin" aria-hidden="true"></i></a></li>
                         </ul>
@@ -509,6 +509,72 @@ and open the template in the editor.
 //			clearInterval(action);
 //		});
 //	});
+    /************ Serach ****************/
+    $('.search-keyword').on('keyup', function (e) {
+        if ($(this).val()[0] === " ") {
+
+
+        } else {
+
+            if (e.keyCode != 40 && e.keyCode != 38 && e.keyCode != 27) {
+                $.ajax({
+                    url: homeUrl + 'product/search-keyword',
+                    type: "POST",
+                    data: {keyword: $(this).val()},
+                    success: function (data) {
+                        $('.search-keyword-dropdown').html(data);
+                    }
+                });
+            }
+        }
+    });
+
+    /********* selected li value to textbox **********/
+    $(document).on('click', '.search-dropdown li', function () {
+        $('.search-dropdown').hide();
+        $('.search-keyword').val($(this).attr('id'));
+        $('form#serach-formm').submit();
+    });
+
+    /********************li navigation keys ***************/
+    $('.search-keyword').on('keydown', function (e) {
+
+        if (e.keyCode == 40) { //down
+
+            var selected = $(".search-selected");
+            $('.search-dropdown li').removeClass('search-selected');
+            if (selected.next().length == 0) {
+                selected.siblings().first().addClass('search-selected');
+            } else {
+                selected.next().addClass('search-selected');
+            }
+        } else if (e.keyCode == 38) { //up
+
+            var selected = $(".search-selected");
+            $('.search-dropdown li').removeClass('search-selected');
+            if (selected.prev().length == 0) {
+                selected.siblings().last().addClass('search-selected');
+            } else {
+                selected.prev().addClass('search-selected');
+            }
+        } else if (e.keyCode == 27) { //escape
+
+            $('.search-dropdown').hide();
+            $('.search-keyword').val('');
+
+        } else if (e.keyCode == 13) { //enter
+
+            var value = $('.search-selected').attr('id');
+            $('.search-dropdown').hide();
+            $('.search-keyword').val(value);
+            $('form#serach-formm').submit();
+            e.preventDefault();
+        }
+
+        $(".search-dropdown").scrollTop(0);//set to top
+        $(".search-dropdown").scrollTop($('.search-selected:first').offset().top - $(".search-dropdown").height())
+
+    });
 </script>
 <script>
     $(window).on("scroll", function () {
